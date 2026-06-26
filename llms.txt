@@ -8,10 +8,11 @@ Main source: https://github.com/selfchecks/selfchecks
 
 ## Positioning
 
-Selfchecks keeps a Checkly-style repository workflow while replacing the hosted
-control plane with a small self-hosted service. It targets API checks, browser
-checks, grouped checks, tags, schedules, artifacts, CI reports, and webhook
-notifications.
+Selfchecks keeps a repository-owned checks-as-code workflow while replacing a
+hosted control plane with a small self-hosted service. It targets API checks,
+browser checks, grouped checks, tags, schedules, artifacts, CI reports, and
+webhook notifications. Checkly-style compatibility is an import and migration
+feature, not the core identity of the product.
 
 ## Useful commands
 
