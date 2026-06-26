@@ -333,8 +333,9 @@ pre,
 
 .signal-strip dt {
   color: var(--green);
-  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-size: clamp(1rem, 2.1vw, 1.28rem);
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .signal-strip dd {
