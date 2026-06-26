@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://selfchecks.github.io/sitemap.xml

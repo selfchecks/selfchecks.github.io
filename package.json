@@ -1,0 +1,13 @@
+{
+  "name": "selfchecks.github.io",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node tools/check-page.mjs",
+    "render:assets": "node tools/render-assets.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.61.1"
+  }
+}

@@ -1,0 +1,29 @@
+# Selfchecks
+
+Selfchecks is a self-hosted synthetic checks runner and dashboard for projects
+that already describe monitoring as code.
+
+Canonical site: https://selfchecks.github.io/
+Main source: https://github.com/selfchecks/selfchecks
+
+## Positioning
+
+Selfchecks keeps a Checkly-style repository workflow while replacing the hosted
+control plane with a small self-hosted service. It targets API checks, browser
+checks, grouped checks, tags, schedules, artifacts, CI reports, and webhook
+notifications.
+
+## Useful commands
+
+- `selfchecks deploy --force`
+- `selfchecks test --reporter=github --record`
+- `selfchecks trigger --reporter=github --retries=1 --record`
+
+## MVP stack
+
+- Next.js dashboard
+- PostgreSQL database
+- BullMQ and Redis worker queue
+- Playwright browser runner
+- native fetch / Undici API runner
+- generic webhooks with Rocket.Chat as the first concrete adapter

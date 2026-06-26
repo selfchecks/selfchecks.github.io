@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Selfchecks — Self-hosted synthetic monitoring from checks as code</title>
+    <meta
+      name="description"
+      content="Selfchecks is a self-hosted synthetic checks runner and dashboard for teams that already describe monitoring as code. Keep Checkly-style checks, run them on your own server, and inspect artifacts in one operational dashboard."
+    />
+    <meta
+      name="keywords"
+      content="self-hosted synthetic monitoring, checkly alternative, checks as code, playwright monitoring, api checks, self-hosted uptime monitoring"
+    />
+    <meta
+      name="robots"
+      content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+    />
+    <meta name="theme-color" content="#06110f" />
+    <meta name="application-name" content="Selfchecks" />
+    <meta name="apple-mobile-web-app-title" content="Selfchecks" />
+    <link rel="canonical" href="https://selfchecks.github.io/" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="alternate" type="text/plain" href="https://selfchecks.github.io/llms.txt" title="LLMs" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Selfchecks" />
+    <meta property="og:title" content="Selfchecks — Self-hosted synthetic monitoring" />
+    <meta
+      property="og:description"
+      content="Run Checkly-style API and browser checks on your own server with a compact dashboard, CI reports, artifacts, traces, screenshots, and webhook notifications."
+    />
+    <meta property="og:url" content="https://selfchecks.github.io/" />
+    <meta property="og:image" content="https://selfchecks.github.io/og-card.png" />
+    <meta
+      property="og:image:alt"
+      content="Selfchecks social card showing a synthetic monitoring dashboard and checks as code workflow."
+    />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Selfchecks — Self-hosted synthetic monitoring" />
+    <meta
+      name="twitter:description"
+      content="A self-hosted runner and dashboard for Checkly-style checks, Playwright artifacts, CI reports, and recovery notifications."
+    />
+    <meta name="twitter:image" content="https://selfchecks.github.io/og-card.png" />
+    <meta
+      name="twitter:image:alt"
+      content="Selfchecks social card showing a synthetic monitoring dashboard and checks as code workflow."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preload" as="image" href="./assets/selfchecks-hero.png" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "name": "Selfchecks",
+            "url": "https://selfchecks.github.io/",
+            "description": "Self-hosted synthetic checks runner and dashboard for Checkly-style checks as code.",
+            "sameAs": ["https://github.com/selfchecks/selfchecks"]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "name": "Selfchecks",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Linux",
+            "url": "https://selfchecks.github.io/",
+            "description": "Self-hosted synthetic checks runner and dashboard for API and browser checks, Playwright artifacts, CI reports, schedules, and webhook notifications.",
+            "isAccessibleForFree": true,
+            "featureList": [
+              "Checkly-style checks as code import",
+              "Self-hosted API and browser check execution",
+              "Playwright traces, screenshots, videos, and logs",
+              "Dashboard for status, groups, tags, and run history",
+              "CI reporter and trigger commands",
+              "Webhook failure and recovery notifications"
+            ]
+          }
+        ]
+      }
+    </script>
+    <script defer src="./app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+
+    <header class="site-hero" id="top">
+      <div class="hero-backdrop" aria-hidden="true">
+        <img
+          src="./assets/selfchecks-hero.png"
+          alt=""
+          width="2400"
+          height="1500"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+      <nav class="topbar" aria-label="Primary navigation">
+        <a class="brand" href="#top" aria-label="Selfchecks home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 40 40" role="img">
+              <path d="M20 4.8 33.2 11.6v16.8L20 35.2 6.8 28.4V11.6L20 4.8Z" />
+              <path d="m13.2 20.2 4.3 4.3 9.6-10.2" />
+              <path d="M12.5 12.5h15M12.5 28h15" />
+            </svg>
+          </span>
+          <span class="brand-copy">
+            <strong>Selfchecks</strong>
+            <span>Checks as code, run at home</span>
+          </span>
+        </a>
+
+        <div class="topbar-actions">
+          <a href="#workflow">Workflow</a>
+          <a href="#dashboard">Dashboard</a>
+          <a href="#cli">CLI</a>
+          <a href="#stack">Stack</a>
+          <a href="https://github.com/selfchecks/selfchecks" target="_blank" rel="noreferrer">GitHub</a>
+        </div>
+      </nav>
+
+      <div class="hero-content">
+        <p class="eyebrow">Self-hosted synthetic monitoring</p>
+        <h1>Selfchecks</h1>
+        <p class="hero-lead">
+          Keep Checkly-style API and browser checks in your repository, run them on your own
+          server, and inspect failures with traces, screenshots, videos, logs, and CI-ready reports.
+        </p>
+
+        <div class="hero-actions" aria-label="Hero actions">
+          <a class="primary-action" href="https://github.com/selfchecks/selfchecks" target="_blank" rel="noreferrer">
+            View source
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M7 4.5h8.5V13" />
+              <path d="M15 5 5 15" />
+            </svg>
+          </a>
+          <a class="secondary-action" href="#cli">See CLI flow</a>
+        </div>
+
+        <dl class="signal-strip" aria-label="Product highlights">
+          <div>
+            <dt>12</dt>
+            <dd>checks imported</dd>
+          </div>
+          <div>
+            <dt>01</dt>
+            <dd>server to own</dd>
+          </div>
+          <div>
+            <dt>14d</dt>
+            <dd>heavy artifacts</dd>
+          </div>
+          <div>
+            <dt>90d</dt>
+            <dd>run metadata</dd>
+          </div>
+        </dl>
+      </div>
+    </header>
+
+    <main id="content">
+      <section class="section intro-section" aria-labelledby="intro-title">
+        <div class="section-heading">
+          <p class="eyebrow">Operational shape</p>
+          <h2 id="intro-title">A compact control plane for teams that already own their checks</h2>
+          <p>
+            Selfchecks is not a full cloud clone. It keeps the familiar repository workflow and
+            replaces the hosted control plane with a small runner, dashboard, and notification loop.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true">01</span>
+            <h3>Source-level compatibility</h3>
+            <p>
+              Import the Checkly-style constructs you already use: browser checks, API checks,
+              groups, tags, schedules, and Playwright entrypoints.
+            </p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true">02</span>
+            <h3>Local execution</h3>
+            <p>
+              Run checks on your own server through a queue-backed worker, with browser isolation
+              and predictable concurrency controls.
+            </p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true">03</span>
+            <h3>Artifacts first</h3>
+            <p>
+              Keep the evidence attached to every run: response data, logs, screenshots, traces,
+              videos, timing metrics, and result JSON.
+            </p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true">04</span>
+            <h3>Failure loop</h3>
+            <p>
+              Trigger checks from CI, show GitHub-style reports, and route failure or recovery
+              events through generic webhooks and Rocket.Chat.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section workflow-section" id="workflow" aria-labelledby="workflow-title">
+        <div class="section-heading compact">
+          <p class="eyebrow">Control loop</p>
+          <h2 id="workflow-title">From code to recovery signal</h2>
+        </div>
+
+        <div class="workflow-track" aria-label="Selfchecks workflow">
+          <article class="workflow-step">
+            <span>Deploy</span>
+            <h3>Upload definitions</h3>
+            <p>CI sends fresh check manifests from the repository and stores the deploy diff.</p>
+          </article>
+          <article class="workflow-step">
+            <span>Queue</span>
+            <h3>Schedule or trigger</h3>
+            <p>Runs enter the worker queue from cron-like schedules, manual triggers, or PR jobs.</p>
+          </article>
+          <article class="workflow-step">
+            <span>Execute</span>
+            <h3>Run API and browser checks</h3>
+            <p>Undici powers API checks, while Playwright captures browser evidence.</p>
+          </article>
+          <article class="workflow-step">
+            <span>Inspect</span>
+            <h3>Open run evidence</h3>
+            <p>The dashboard links status, stats, logs, traces, screenshots, and responses.</p>
+          </article>
+          <article class="workflow-step">
+            <span>Notify</span>
+            <h3>Send failure and recovery events</h3>
+            <p>Webhook adapters keep the incident channel aligned with the latest run state.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section dashboard-section" id="dashboard" aria-labelledby="dashboard-title">
+        <div class="dashboard-copy">
+          <p class="eyebrow">Dashboard</p>
+          <h2 id="dashboard-title">Built for dense status reading, not marketing charts</h2>
+          <p>
+            The primary UI is an operational dashboard: grouped checks, filters, latest run state,
+            p95 latency, availability, run history bars, artifacts, and settings for environments
+            and notification targets.
+          </p>
+          <ul class="check-list">
+            <li>Compact group and check rows for daily scanning.</li>
+            <li>Run detail pages with request, response, logs, trace, video, and screenshots.</li>
+            <li>Admin settings for project secrets and runtime environment variables.</li>
+          </ul>
+        </div>
+
+        <figure class="dashboard-visual">
+          <img
+            src="./assets/selfchecks-dashboard.png"
+            alt="Selfchecks dashboard mock showing passing, degraded, and failing checks with artifact evidence."
+            width="1600"
+            height="1000"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption>Dashboard concept based on the current Selfchecks product direction.</figcaption>
+        </figure>
+      </section>
+
+      <section class="section cli-section" id="cli" aria-labelledby="cli-title">
+        <div class="section-heading compact">
+          <p class="eyebrow">CLI shim</p>
+          <h2 id="cli-title">Keep the CI commands familiar</h2>
+          <p>
+            Selfchecks starts with the subset of Checkly-like commands already useful in CI. The
+            workflow remains explicit, repository-owned, and easy to migrate incrementally.
+          </p>
+        </div>
+
+        <div class="code-layout">
+          <article class="code-card">
+            <div class="code-card-header">
+              <span>CI trigger</span>
+              <button class="copy-button" type="button" data-copy-target="cli-trigger">Copy</button>
+            </div>
+            <pre><code id="cli-trigger" data-lang="shell">selfchecks deploy --force
+selfchecks test \
+  --tags app,smoke,pr \
+  -e ENVIRONMENT_URL=https://preview.example.com \
+  --reporter=github \
+  --record
+selfchecks trigger \
+  --reporter=github \
+  --retries=1 \
+  --record</code></pre>
+          </article>
+
+          <article class="code-card">
+            <div class="code-card-header">
+              <span>Check definition</span>
+              <button class="copy-button" type="button" data-copy-target="check-definition">Copy</button>
+            </div>
+            <pre><code id="check-definition" data-lang="ts">new BrowserCheck("Signin", {
+  name: "Signin",
+  activated: true,
+  frequency: Frequency.EVERY_10M,
+  locations: ["self-hosted"],
+  tags: ["app", "smoke"],
+  code: {
+    entrypoint: "./signin.spec.ts"
+  }
+});</code></pre>
+          </article>
+        </div>
+      </section>
+
+      <section class="section stack-section" id="stack" aria-labelledby="stack-title">
+        <div class="section-heading compact">
+          <p class="eyebrow">MVP stack</p>
+          <h2 id="stack-title">Small, boring, and inspectable</h2>
+        </div>
+
+        <div class="stack-grid">
+          <article>
+            <h3>Next.js dashboard</h3>
+            <p>React UI, auth, API routes, settings, run history, and artifact views.</p>
+          </article>
+          <article>
+            <h3>PostgreSQL</h3>
+            <p>Projects, deployments, groups, checks, runs, artifacts, secrets, and notifications.</p>
+          </article>
+          <article>
+            <h3>BullMQ + Redis</h3>
+            <p>Predictable scheduling, retries, concurrency limits, and background execution.</p>
+          </article>
+          <article>
+            <h3>Playwright</h3>
+            <p>Browser checks with traces, screenshots, videos, console errors, and timing metrics.</p>
+          </article>
+          <article>
+            <h3>Undici fetch</h3>
+            <p>API checks with request/response capture and assertion results.</p>
+          </article>
+          <article>
+            <h3>Webhooks</h3>
+            <p>Generic failure and recovery notifications, with Rocket.Chat first.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div>
+        <a class="brand footer-brand" href="#top" aria-label="Selfchecks home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 40 40" role="img">
+              <path d="M20 4.8 33.2 11.6v16.8L20 35.2 6.8 28.4V11.6L20 4.8Z" />
+              <path d="m13.2 20.2 4.3 4.3 9.6-10.2" />
+              <path d="M12.5 12.5h15M12.5 28h15" />
+            </svg>
+          </span>
+          <span class="brand-copy">
+            <strong>Selfchecks</strong>
+            <span>Self-hosted checks runner</span>
+          </span>
+        </a>
+        <p>Built for repositories that already treat monitoring as code.</p>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/selfchecks/selfchecks" target="_blank" rel="noreferrer">Main repo</a>
+        <a href="https://github.com/selfchecks/selfchecks.github.io" target="_blank" rel="noreferrer">Landing repo</a>
+        <a href="./llms.txt">LLMs</a>
+      </div>
+    </footer>
+  </body>
+</html>

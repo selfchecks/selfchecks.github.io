@@ -1,0 +1,586 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Selfchecks asset renderer</title>
+    <style>
+      :root {
+        --bg: #06110f;
+        --panel: #0b1816;
+        --panel-2: #10211d;
+        --line: rgba(230, 255, 246, 0.14);
+        --text: #f2fff9;
+        --muted: rgba(222, 244, 236, 0.66);
+        --green: #5ff2a0;
+        --cyan: #76e4ff;
+        --amber: #ffd166;
+        --red: #ff6b7d;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: #020605;
+        color: var(--text);
+        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .asset {
+        position: relative;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 78% 18%, rgba(118, 228, 255, 0.2), transparent 24%),
+          radial-gradient(circle at 36% 88%, rgba(95, 242, 160, 0.18), transparent 24%),
+          linear-gradient(135deg, #020605 0%, #06110f 44%, #0c1715 100%);
+      }
+
+      .asset::before {
+        position: absolute;
+        inset: 0;
+        content: "";
+        background-image:
+          linear-gradient(rgba(222, 244, 236, 0.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(222, 244, 236, 0.055) 1px, transparent 1px);
+        background-size: 72px 72px;
+        mask-image: linear-gradient(90deg, transparent, black 10%, black 86%, transparent);
+      }
+
+      .hero {
+        width: 2400px;
+        height: 1500px;
+      }
+
+      .og {
+        width: 1200px;
+        height: 630px;
+      }
+
+      .dashboard {
+        width: 1600px;
+        height: 1000px;
+      }
+
+      .icon {
+        display: grid;
+        width: 180px;
+        height: 180px;
+        place-items: center;
+        background: #06110f;
+      }
+
+      .icon-mark {
+        width: 142px;
+        height: 142px;
+      }
+
+      .hero-board {
+        position: absolute;
+        top: 210px;
+        right: 120px;
+        width: 1380px;
+        transform: rotateX(52deg) rotateZ(-12deg) rotateY(0deg);
+        transform-origin: center;
+        border: 1px solid rgba(230, 255, 246, 0.18);
+        border-radius: 24px;
+        background: rgba(6, 17, 15, 0.82);
+        box-shadow: 0 80px 160px rgba(0, 0, 0, 0.45);
+      }
+
+      .board-header,
+      .dash-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        border-bottom: 1px solid var(--line);
+        padding: 24px;
+      }
+
+      .window-dots,
+      .mini-dots {
+        display: flex;
+        gap: 10px;
+      }
+
+      .window-dots span,
+      .mini-dots span {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--green);
+      }
+
+      .window-dots span:nth-child(2),
+      .mini-dots span:nth-child(2) {
+        background: var(--amber);
+      }
+
+      .window-dots span:nth-child(3),
+      .mini-dots span:nth-child(3) {
+        background: var(--red);
+      }
+
+      .pulse {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        color: var(--green);
+        font-size: 26px;
+        font-weight: 800;
+      }
+
+      .pulse::before {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 0 12px rgba(95, 242, 160, 0.12);
+        content: "";
+      }
+
+      .board-grid {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 24px;
+        padding: 24px;
+      }
+
+      .rail,
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(16, 33, 29, 0.78);
+      }
+
+      .rail {
+        display: grid;
+        gap: 16px;
+        padding: 20px;
+      }
+
+      .rail-row {
+        display: grid;
+        grid-template-columns: 18px 1fr 90px;
+        gap: 18px;
+        align-items: center;
+        color: rgba(242, 255, 249, 0.8);
+        font-size: 24px;
+        font-weight: 800;
+      }
+
+      .rail-row::before {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--green);
+        content: "";
+      }
+
+      .rail-row:nth-child(3)::before {
+        background: var(--amber);
+      }
+
+      .rail-row:nth-child(5)::before {
+        background: var(--red);
+      }
+
+      .rail-row span:last-child {
+        color: var(--muted);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 18px;
+        text-align: right;
+      }
+
+      .panel {
+        padding: 22px;
+      }
+
+      .chart {
+        display: grid;
+        height: 300px;
+        grid-template-columns: repeat(28, 1fr);
+        align-items: end;
+        gap: 9px;
+        border-bottom: 1px solid var(--line);
+        padding-bottom: 18px;
+      }
+
+      .bar {
+        min-height: 32px;
+        border-radius: 999px 999px 4px 4px;
+        background: linear-gradient(180deg, var(--green), rgba(95, 242, 160, 0.22));
+      }
+
+      .bar.warn {
+        background: linear-gradient(180deg, var(--amber), rgba(255, 209, 102, 0.2));
+      }
+
+      .bar.fail {
+        background: linear-gradient(180deg, var(--red), rgba(255, 107, 125, 0.2));
+      }
+
+      .metric-row {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 20px;
+      }
+
+      .metric {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 18px;
+        background: rgba(7, 18, 16, 0.72);
+      }
+
+      .metric strong {
+        display: block;
+        color: var(--green);
+        font-family: "JetBrains Mono", monospace;
+        font-size: 34px;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 18px;
+      }
+
+      .full-dashboard {
+        position: absolute;
+        inset: 44px;
+        overflow: hidden;
+        border: 1px solid rgba(230, 255, 246, 0.18);
+        border-radius: 22px;
+        background: rgba(6, 17, 15, 0.96);
+        box-shadow: 0 60px 140px rgba(0, 0, 0, 0.36);
+      }
+
+      .dash-body {
+        display: grid;
+        grid-template-columns: 270px 1fr;
+        min-height: calc(100% - 84px);
+      }
+
+      .sidebar {
+        border-right: 1px solid var(--line);
+        padding: 28px;
+        background: rgba(4, 12, 10, 0.78);
+      }
+
+      .side-logo {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 36px;
+        font-size: 26px;
+        font-weight: 900;
+      }
+
+      .side-mark {
+        width: 42px;
+        height: 42px;
+        border: 1px solid rgba(95, 242, 160, 0.36);
+        border-radius: 10px;
+        background: rgba(95, 242, 160, 0.12);
+      }
+
+      .side-item {
+        display: flex;
+        justify-content: space-between;
+        border-radius: 12px;
+        padding: 14px;
+        color: var(--muted);
+        font-size: 20px;
+        font-weight: 800;
+      }
+
+      .side-item.active {
+        background: rgba(95, 242, 160, 0.14);
+        color: var(--text);
+      }
+
+      .content {
+        display: grid;
+        gap: 22px;
+        padding: 30px;
+      }
+
+      .summary {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+
+      .summary-card {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 20px;
+        background: rgba(16, 33, 29, 0.76);
+      }
+
+      .summary-card span {
+        color: var(--muted);
+        font-size: 18px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .summary-card strong {
+        display: block;
+        margin-top: 8px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 46px;
+      }
+
+      .table {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: rgba(16, 33, 29, 0.76);
+      }
+
+      .table-row {
+        display: grid;
+        grid-template-columns: 1.1fr 0.45fr 0.55fr 0.55fr 1fr;
+        align-items: center;
+        gap: 18px;
+        border-bottom: 1px solid var(--line);
+        padding: 19px 20px;
+        color: rgba(242, 255, 249, 0.86);
+        font-size: 19px;
+        font-weight: 760;
+      }
+
+      .table-row.header {
+        color: var(--muted);
+        font-size: 15px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .table-row:last-child {
+        border-bottom: 0;
+      }
+
+      .status {
+        display: inline-flex;
+        width: fit-content;
+        align-items: center;
+        gap: 8px;
+        border-radius: 999px;
+        padding: 8px 12px;
+        background: rgba(95, 242, 160, 0.12);
+        color: var(--green);
+      }
+
+      .status::before {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: currentColor;
+        content: "";
+      }
+
+      .status.warn {
+        background: rgba(255, 209, 102, 0.12);
+        color: var(--amber);
+      }
+
+      .status.fail {
+        background: rgba(255, 107, 125, 0.12);
+        color: var(--red);
+      }
+
+      .bars {
+        display: grid;
+        grid-template-columns: repeat(14, 1fr);
+        gap: 5px;
+        align-items: end;
+      }
+
+      .mini {
+        height: 26px;
+        border-radius: 6px;
+        background: rgba(95, 242, 160, 0.82);
+      }
+
+      .mini:nth-child(5),
+      .mini:nth-child(11) {
+        background: rgba(255, 209, 102, 0.86);
+      }
+
+      .mini:nth-child(9) {
+        background: rgba(255, 107, 125, 0.92);
+      }
+
+      .artifact-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+      }
+
+      .artifact {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 18px;
+        background: rgba(7, 18, 16, 0.8);
+      }
+
+      .artifact strong {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 21px;
+      }
+
+      .artifact span {
+        color: var(--muted);
+        font-size: 16px;
+      }
+
+      .og-copy {
+        position: absolute;
+        left: 72px;
+        top: 78px;
+        z-index: 2;
+        width: 560px;
+      }
+
+      .og-copy .label {
+        margin: 0 0 20px;
+        color: var(--green);
+        font-size: 20px;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .og-copy h1 {
+        margin: 0;
+        font-size: 78px;
+        font-weight: 950;
+        letter-spacing: 0;
+        line-height: 0.92;
+      }
+
+      .og-copy .sub {
+        margin: 26px 0 0;
+        color: rgba(242, 255, 249, 0.82);
+        font-size: 26px;
+        font-weight: 650;
+        line-height: 1.45;
+      }
+
+      .og-panel {
+        position: absolute;
+        right: 58px;
+        bottom: 58px;
+        width: 470px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(6, 17, 15, 0.88);
+        box-shadow: 0 40px 90px rgba(0, 0, 0, 0.42);
+      }
+
+      .og-panel .table-row {
+        grid-template-columns: 1fr 0.55fr 0.8fr;
+        padding: 15px 17px;
+        font-size: 17px;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="asset hero" data-asset="hero">
+      <div class="hero-board">
+        <div class="board-header">
+          <div class="window-dots"><span></span><span></span><span></span></div>
+          <div class="pulse">runner online</div>
+        </div>
+        <div class="board-grid">
+          <div class="rail">
+            <div class="rail-row">Signin flow <span>passed</span></div>
+            <div class="rail-row">BFF health <span>passed</span></div>
+            <div class="rail-row">Checkout API <span>degraded</span></div>
+            <div class="rail-row">Transport smoke <span>passed</span></div>
+            <div class="rail-row">Account regress <span>failed</span></div>
+            <div class="rail-row">DNS probe <span>passed</span></div>
+          </div>
+          <div class="panel">
+            <div class="chart">
+              <span class="bar" style="height: 46%"></span><span class="bar" style="height: 62%"></span><span class="bar" style="height: 74%"></span><span class="bar" style="height: 54%"></span><span class="bar warn" style="height: 86%"></span><span class="bar" style="height: 58%"></span><span class="bar" style="height: 48%"></span><span class="bar" style="height: 66%"></span><span class="bar fail" style="height: 94%"></span><span class="bar" style="height: 52%"></span><span class="bar warn" style="height: 78%"></span><span class="bar" style="height: 64%"></span><span class="bar" style="height: 50%"></span><span class="bar" style="height: 70%"></span><span class="bar" style="height: 46%"></span><span class="bar" style="height: 68%"></span><span class="bar" style="height: 58%"></span><span class="bar" style="height: 76%"></span><span class="bar" style="height: 56%"></span><span class="bar" style="height: 72%"></span><span class="bar" style="height: 48%"></span><span class="bar" style="height: 60%"></span><span class="bar" style="height: 54%"></span><span class="bar" style="height: 82%"></span><span class="bar" style="height: 62%"></span><span class="bar" style="height: 74%"></span><span class="bar" style="height: 58%"></span><span class="bar" style="height: 66%"></span>
+            </div>
+            <div class="metric-row">
+              <div class="metric"><strong>98.7%</strong><span>availability</span></div>
+              <div class="metric"><strong>642ms</strong><span>p95 duration</span></div>
+              <div class="metric"><strong>6</strong><span>artifacts</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="asset dashboard" data-asset="dashboard">
+      <div class="full-dashboard">
+        <div class="dash-header">
+          <div class="mini-dots"><span></span><span></span><span></span></div>
+          <div class="pulse">default project</div>
+        </div>
+        <div class="dash-body">
+          <aside class="sidebar">
+            <div class="side-logo"><span class="side-mark"></span>Selfchecks</div>
+            <div class="side-item active"><span>Home</span><span>12</span></div>
+            <div class="side-item"><span>Runs</span><span>84</span></div>
+            <div class="side-item"><span>Artifacts</span><span>21</span></div>
+            <div class="side-item"><span>Settings</span><span>4</span></div>
+          </aside>
+          <main class="content">
+            <section class="summary">
+              <div class="summary-card"><span>Passing</span><strong style="color: var(--green)">9</strong></div>
+              <div class="summary-card"><span>Degraded</span><strong style="color: var(--amber)">2</strong></div>
+              <div class="summary-card"><span>Failing</span><strong style="color: var(--red)">1</strong></div>
+            </section>
+            <section class="table">
+              <div class="table-row header"><span>Check</span><span>Status</span><span>p95</span><span>Avg</span><span>History</span></div>
+              <div class="table-row"><span>Signin smoke</span><span class="status">Passing</span><span>840ms</span><span>420ms</span><span class="bars"><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i></span></div>
+              <div class="table-row"><span>BFF health</span><span class="status">Passing</span><span>260ms</span><span>118ms</span><span class="bars"><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i></span></div>
+              <div class="table-row"><span>Checkout API</span><span class="status warn">Degraded</span><span>1.8s</span><span>690ms</span><span class="bars"><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i></span></div>
+              <div class="table-row"><span>Account regress</span><span class="status fail">Failing</span><span>timeout</span><span>2.4s</span><span class="bars"><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i><i class="mini"></i></span></div>
+            </section>
+            <section class="artifact-strip">
+              <div class="artifact"><strong>trace.zip</strong><span>Playwright trace</span></div>
+              <div class="artifact"><strong>screenshot.png</strong><span>Failure frame</span></div>
+              <div class="artifact"><strong>response.json</strong><span>API payload</span></div>
+              <div class="artifact"><strong>job.log</strong><span>Runner output</span></div>
+            </section>
+          </main>
+        </div>
+      </div>
+    </section>
+
+    <section class="asset og" data-asset="og">
+      <div class="og-copy">
+        <p class="label">Selfchecks</p>
+        <h1>Self-hosted synthetic monitoring</h1>
+        <p class="sub">Run Checkly-style API and browser checks on your own server with artifacts, traces, CI reports, and webhooks.</p>
+      </div>
+      <div class="og-panel">
+        <div class="table-row"><span>Signin smoke</span><span class="status">OK</span><span>420ms</span></div>
+        <div class="table-row"><span>Checkout API</span><span class="status warn">Slow</span><span>1.8s</span></div>
+        <div class="table-row"><span>Account regress</span><span class="status fail">Fail</span><span>trace.zip</span></div>
+      </div>
+    </section>
+
+    <section class="icon" data-asset="icon">
+      <svg class="icon-mark" viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="12" fill="#06110f" />
+        <path d="M32 8 52 18.4v27.2L32 56 12 45.6V18.4L32 8Z" fill="#10211d" stroke="#5ff2a0" stroke-width="3" />
+        <path d="m21.6 32.4 6.5 6.5L42.8 23.2" fill="none" stroke="#f2fff9" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" />
+        <path d="M20 20.5h24M20 45h24" fill="none" stroke="#76e4ff" stroke-linecap="round" stroke-width="3" opacity=".82" />
+      </svg>
+    </section>
+  </body>
+</html>
