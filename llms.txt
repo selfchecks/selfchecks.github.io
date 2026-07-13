@@ -20,6 +20,13 @@ feature, not the core identity of the product.
 - `selfchecks test --reporter=github --record`
 - `selfchecks trigger --reporter=github --retries=1 --record`
 
+## Remote CI flow
+
+Set `SELFCHECKS_URL` to the dashboard URL and `SELFCHECKS_API_TOKEN` to a valid
+project API token. The CLI uploads deploy and test bundles through the
+authenticated HTTP API. `selfchecks trigger` queues checks from the latest
+successful deployment. Project CI does not require SSH or rsync credentials.
+
 ## MVP stack
 
 - Next.js dashboard

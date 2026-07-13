@@ -227,7 +227,7 @@
           <article class="workflow-step">
             <span>Deploy</span>
             <h3>Upload definitions</h3>
-            <p>CI sends fresh check manifests from the repository and stores the deploy diff.</p>
+            <p>CI uploads fresh check manifests through the authenticated HTTP API.</p>
           </article>
           <article class="workflow-step">
             <span>Queue</span>
@@ -283,11 +283,12 @@
 
       <section class="section cli-section" id="cli" aria-labelledby="cli-title">
         <div class="section-heading compact">
-          <p class="eyebrow">CLI shim</p>
-          <h2 id="cli-title">Keep the CI commands familiar</h2>
+          <p class="eyebrow">HTTP API</p>
+          <h2 id="cli-title">Connect CI with one API token</h2>
           <p>
-            Selfchecks starts with the subset of Checkly-like commands already useful in CI. The
-            workflow remains explicit, repository-owned, and easy to migrate incrementally.
+            Set the service URL and token once. Deploys and test bundles are uploaded through the
+            authenticated API, while triggers queue the latest successful deployment. Project CI
+            does not need SSH or rsync access to the Selfchecks host.
           </p>
         </div>
 
@@ -297,7 +298,10 @@
               <span>CI trigger</span>
               <button class="copy-button" type="button" data-copy-target="cli-trigger">Copy</button>
             </div>
-            <pre><code id="cli-trigger" data-lang="shell">selfchecks deploy --force
+            <pre><code id="cli-trigger" data-lang="shell">export SELFCHECKS_URL=https://checks.example.com
+export SELFCHECKS_API_TOKEN="$CI_SELFCHECKS_API_TOKEN"
+
+selfchecks deploy --force
 selfchecks test \
   --tags app,smoke,pr \
   -e ENVIRONMENT_URL=https://preview.example.com \
