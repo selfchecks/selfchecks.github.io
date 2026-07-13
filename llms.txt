@@ -27,6 +27,15 @@ project API token. The CLI uploads deploy and test bundles through the
 authenticated HTTP API. `selfchecks trigger` queues checks from the latest
 successful deployment. Project CI does not require SSH or rsync credentials.
 
+Recorded test sessions store CI metadata as separate fields rather than a
+delimiter-based source string:
+
+- `repository` (`--repository`, defaults to `CI_PROJECT_PATH`)
+- `ref` (`--ref`, defaults to the GitLab branch or tag)
+- `commitSha` (`--commit-sha`, defaults to `CI_COMMIT_SHA`)
+- `pipelineUrl` (`--pipeline-url`, defaults to `CI_PIPELINE_URL`)
+- `jobUrl` (`--job-url`, defaults to `CI_JOB_URL`)
+
 ## MVP stack
 
 - Next.js dashboard

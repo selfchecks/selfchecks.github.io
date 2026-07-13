@@ -546,6 +546,10 @@ pre,
   gap: 1rem;
 }
 
+.metadata-card {
+  margin-top: 1rem;
+}
+
 .code-card {
   overflow: hidden;
 }

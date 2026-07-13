@@ -330,6 +330,22 @@ selfchecks trigger \
 });</code></pre>
           </article>
         </div>
+
+        <article class="feature-card metadata-card">
+          <h3>Structured CI metadata</h3>
+          <p>
+            Recorded test sessions keep CI context as separate fields instead of encoding it in a
+            delimiter-based source string. GitLab variables provide the defaults, and every value
+            can be overridden with a CLI flag.
+          </p>
+          <ul class="check-list">
+            <li><span><code>repository</code> / <code>--repository</code> — repository path, such as <code>sendsay-ru/frontend/account</code>.</span></li>
+            <li><span><code>ref</code> / <code>--ref</code> — branch or tag, such as <code>release/3.192.42</code>.</span></li>
+            <li><span><code>commitSha</code> / <code>--commit-sha</code> — full commit SHA.</span></li>
+            <li><span><code>pipelineUrl</code> / <code>--pipeline-url</code> — link to the CI pipeline.</span></li>
+            <li><span><code>jobUrl</code> / <code>--job-url</code> — link to the CI job.</span></li>
+          </ul>
+        </article>
       </section>
 
       <section class="section stack-section" id="stack" aria-labelledby="stack-title">
