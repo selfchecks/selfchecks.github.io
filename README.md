@@ -9,6 +9,7 @@ Website:
 ## What is here
 
 - `index.html` - landing page markup
+- `getting-started.html` - public setup, API, CI/CD, and self-hosting guide
 - `styles.css` - visual styles
 - `app.js` - small client-side interactions
 - `assets/` - generated product mockups and social images
@@ -26,6 +27,7 @@ Then open:
 
 ```text
 http://127.0.0.1:4173
+http://127.0.0.1:4173/getting-started.html
 ```
 
 ## Checks

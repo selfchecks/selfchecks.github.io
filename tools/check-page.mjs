@@ -8,6 +8,7 @@ import { chromium } from "playwright";
 const root = process.cwd();
 const requiredFiles = [
   "index.html",
+  "getting-started.html",
   "styles.css",
   "app.js",
   "favicon.svg",
@@ -59,29 +60,54 @@ await new Promise((resolve) => {
 });
 
 const { port } = server.address();
-const url = `http://127.0.0.1:${port}/`;
 const browser = await chromium.launch();
 
 try {
-  for (const viewport of [
-    { height: 900, width: 1440 },
-    { height: 812, width: 390 },
+  for (const pageDefinition of [
+    {
+      path: "/",
+      requiredSelectors: ["h1", "#dashboard img", 'a[href="./getting-started.html"]'],
+      title: "Selfchecks",
+    },
+    {
+      path: "/getting-started.html",
+      requiredSelectors: [
+        "h1",
+        "#project",
+        "#http-api",
+        "#gitlab-ci",
+        "#github-ci",
+        "#server",
+      ],
+      title: "Getting started with Selfchecks",
+    },
   ]) {
-    const page = await browser.newPage({ viewport });
-    const errors = [];
-    page.on("console", (message) => {
-      if (message.type() === "error") {
-        errors.push(message.text());
-      }
-    });
-    page.on("pageerror", (error) => errors.push(error.message));
+    for (const viewport of [
+      { height: 900, width: 1440 },
+      { height: 812, width: 390 },
+    ]) {
+      const page = await browser.newPage({ viewport });
+      const errors = [];
+      page.on("console", (message) => {
+        if (message.type() === "error") {
+          errors.push(message.text());
+        }
+      });
+      page.on("pageerror", (error) => errors.push(error.message));
 
-    const response = await page.goto(url, { waitUntil: "networkidle" });
-    assert.equal(response?.status(), 200, "home page should load");
-    await assert.doesNotReject(() => page.locator("h1", { hasText: "Selfchecks" }).waitFor());
-    await assert.doesNotReject(() => page.locator("#dashboard img").waitFor());
-    assert.equal(errors.length, 0, `browser console errors: ${errors.join("; ")}`);
-    await page.close();
+      const response = await page.goto(`http://127.0.0.1:${port}${pageDefinition.path}`, {
+        waitUntil: "networkidle",
+      });
+      assert.equal(response?.status(), 200, `${pageDefinition.path} should load`);
+      assert.match(await page.title(), new RegExp(pageDefinition.title, "i"));
+
+      for (const selector of pageDefinition.requiredSelectors) {
+        await assert.doesNotReject(() => page.locator(selector).first().waitFor());
+      }
+
+      assert.equal(errors.length, 0, `browser console errors: ${errors.join("; ")}`);
+      await page.close();
+    }
   }
 } finally {
   await browser.close();

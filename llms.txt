@@ -4,7 +4,15 @@ Selfchecks is a self-hosted synthetic checks runner and dashboard for projects
 that already describe monitoring as code.
 
 Canonical site: https://selfchecks.github.io/
+Getting started: https://selfchecks.github.io/getting-started.html
 Main source: https://github.com/selfchecks/selfchecks
+
+## Documentation
+
+The Getting Started guide is the canonical external documentation for creating
+a project, configuring Playwright and Checkly-compatible manifests, writing API
+and browser checks, selecting test modules, using the authenticated HTTP API,
+setting up GitLab CI/CD and GitHub Actions, and deploying a Selfchecks server.
 
 ## Positioning
 
