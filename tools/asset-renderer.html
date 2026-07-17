@@ -576,10 +576,25 @@
 
     <section class="icon" data-asset="icon">
       <svg class="icon-mark" viewBox="0 0 64 64" aria-hidden="true">
-        <rect width="64" height="64" rx="12" fill="#06110f" />
-        <path d="M32 8 52 18.4v27.2L32 56 12 45.6V18.4L32 8Z" fill="#10211d" stroke="#5ff2a0" stroke-width="3" />
-        <path d="m21.6 32.4 6.5 6.5L42.8 23.2" fill="none" stroke="#f2fff9" stroke-linecap="round" stroke-linejoin="round" stroke-width="5" />
-        <path d="M20 20.5h24M20 45h24" fill="none" stroke="#76e4ff" stroke-linecap="round" stroke-width="3" opacity=".82" />
+        <defs>
+          <radialGradient id="selfchecks-bg" cx="50%" cy="45%" r="72%">
+            <stop offset="0" stop-color="#06182A" />
+            <stop offset="1" stop-color="#020B17" />
+          </radialGradient>
+          <linearGradient gradientUnits="userSpaceOnUse" id="selfchecks-ring" x1="8" x2="56" y1="24" y2="40">
+            <stop offset="0" stop-color="#34D399" />
+            <stop offset="0.48" stop-color="#19DDB7" />
+            <stop offset="1" stop-color="#22D3EE" />
+          </linearGradient>
+          <linearGradient gradientUnits="userSpaceOnUse" id="selfchecks-pulse" x1="14" x2="55" y1="32" y2="32">
+            <stop offset="0" stop-color="#34D399" />
+            <stop offset="0.45" stop-color="#18DDB9" />
+            <stop offset="1" stop-color="#22D3EE" />
+          </linearGradient>
+        </defs>
+        <rect width="64" height="64" fill="url(#selfchecks-bg)" />
+        <circle cx="32" cy="32" r="23" fill="none" stroke="url(#selfchecks-ring)" stroke-width="3.6" />
+        <path d="M16 32h6.2l3.2-5.6 3.3 11 4.1-18.2 5.4 24.2 3.5-11.4H49" fill="none" stroke="url(#selfchecks-pulse)" stroke-linecap="round" stroke-linejoin="round" stroke-width="4.2" />
       </svg>
     </section>
   </body>

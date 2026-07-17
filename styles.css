@@ -169,41 +169,11 @@ pre,
 }
 
 .brand-mark {
-  display: grid;
   width: 2.75rem;
   height: 2.75rem;
   flex: 0 0 auto;
-  place-items: center;
-  border: 1px solid rgba(95, 242, 160, 0.34);
   border-radius: var(--radius);
-  background:
-    linear-gradient(
-      135deg,
-      rgba(95, 242, 160, 0.22),
-      rgba(118, 228, 255, 0.08)
-    ),
-    rgba(7, 18, 16, 0.84);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 14px 30px rgba(0, 0, 0, 0.28);
-}
-
-.brand-mark svg {
-  width: 1.75rem;
-  height: 1.75rem;
-  fill: none;
-}
-
-.brand-mark path:first-child {
-  fill: rgba(95, 242, 160, 0.12);
-  stroke: var(--green);
-}
-
-.brand-mark path:not(:first-child) {
-  stroke: var(--text);
-  stroke-width: 2.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
 }
 
 .brand-copy {
