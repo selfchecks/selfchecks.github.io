@@ -6,6 +6,8 @@ that already describe monitoring as code.
 Canonical site: https://selfchecks.github.io/
 Getting started: https://selfchecks.github.io/getting-started.html
 Main source: https://github.com/selfchecks/selfchecks
+License: Elastic License 2.0 (source available; not OSI-approved open source)
+License terms: https://github.com/selfchecks/selfchecks/blob/stable/LICENSE
 
 ## Documentation
 

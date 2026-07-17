@@ -83,6 +83,8 @@ try {
         '#dashboard img[src="./assets/product-dashboard.webp"]',
         ".product-tour-grid img",
         'a[href="./getting-started.html"]',
+        ".hero-license",
+        'a[href="https://github.com/selfchecks/selfchecks/blob/stable/LICENSE"]',
       ],
       title: "Selfchecks",
     },

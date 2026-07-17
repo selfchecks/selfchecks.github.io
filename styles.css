@@ -286,6 +286,23 @@ pre,
   margin-top: 2rem;
 }
 
+.hero-license {
+  margin: 0.85rem 0 0;
+  color: var(--faint);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.hero-license a,
+.footer-license a {
+  color: var(--green);
+}
+
+.hero-license a:hover,
+.footer-license a:hover {
+  color: var(--text);
+}
+
 .primary-action,
 .secondary-action,
 .copy-button {
@@ -720,6 +737,18 @@ code {
 
 .footer p {
   margin: 0;
+}
+
+.footer > div:first-child {
+  max-width: 44rem;
+}
+
+.footer .footer-license {
+  max-width: 42rem;
+  margin-top: 0.65rem;
+  color: var(--faint);
+  font-size: 0.78rem;
+  line-height: 1.6;
 }
 
 .footer-links {
