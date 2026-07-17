@@ -25,7 +25,7 @@ minimal project with one Playwright browser check for
 `https://selfchecks.github.io/`.
 
 Projects migrating from Checkly can keep their existing import specifiers with
-the npm alias `"checkly": "npm:@selfchecks/selfchecks@0.1.0"`.
+the npm alias `"checkly": "npm:@selfchecks/selfchecks@latest"`.
 
 ## Positioning
 

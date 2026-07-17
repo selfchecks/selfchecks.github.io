@@ -538,8 +538,8 @@ new ApiCheck("api-health", {
             </div>
             <pre><code id="migration-package" data-lang="json">{
   "devDependencies": {
-    "@selfchecks/selfchecks-cli": "0.1.0",
-    "checkly": "npm:@selfchecks/selfchecks@0.1.0"
+    "@selfchecks/selfchecks-cli": "latest",
+    "checkly": "npm:@selfchecks/selfchecks@latest"
   },
   "scripts": {
     "selfchecks": "selfchecks"
@@ -998,17 +998,13 @@ jobs:
                   Copy
                 </button>
               </div>
-              <pre><code id="server-install" data-lang="shell">git clone https://github.com/selfchecks/selfchecks.git
-cd selfchecks
-sudo bash scripts/install-selfchecks.sh --source-dir .
-
-# Read the setup token again if needed
-sudo grep '^SELFCHECKS_SETUP_TOKEN=' /opt/selfchecks/.env</code></pre>
+              <pre><code id="server-install" data-lang="shell">curl -fsSL https://github.com/selfchecks/selfchecks/releases/download/bootstrap/bootstrap.sh | sudo bash</code></pre>
             </article>
             <aside class="guide-note">
               <h3>Before you start</h3>
               <ul class="guide-list">
                 <li>Linux with root or sudo access</li>
+                <li><code>curl</code> installed</li>
                 <li>A domain pointing to the server IP</li>
                 <li>Inbound ports 80 and 443 open</li>
                 <li>Capacity to run Chromium checks</li>
@@ -1024,6 +1020,8 @@ sudo grep '^SELFCHECKS_SETUP_TOKEN=' /opt/selfchecks/.env</code></pre>
               certificate after setup. Read
               <code>SELFCHECKS_API_TOKEN</code> from
               <code>/opt/selfchecks/.env</code> for CLI access.
+              Run the installation command again to update Selfchecks without
+              replacing the existing environment or runtime configuration.
             </p>
           </aside>
         </section>
