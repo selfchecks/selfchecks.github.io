@@ -870,7 +870,9 @@ code {
   gap: 1rem;
 }
 
-.docs-content > .guide-section > .code-card + .code-card {
+.docs-content > .guide-section > .code-card + .code-card,
+.docs-content > .guide-section > .code-card + .guide-note,
+.docs-content > .guide-section > .docs-grid + .guide-note {
   margin-top: 1rem;
 }
 

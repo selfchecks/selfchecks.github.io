@@ -65,11 +65,18 @@ const browser = await chromium.launch();
 try {
   for (const pageDefinition of [
     {
+      minimumVerticalGaps: [],
       path: "/",
       requiredSelectors: ["h1", "#dashboard img", 'a[href="./getting-started.html"]'],
       title: "Selfchecks",
     },
     {
+      minimumVerticalGaps: [
+        ["#configuration > .docs-grid", "#configuration > .guide-note"],
+        ["#deploy > .code-card:last-of-type", "#deploy > .guide-note"],
+        ["#gitlab-ci > .code-card", "#gitlab-ci > .guide-note"],
+        ["#github-ci > .code-card", "#github-ci > .guide-note"],
+      ],
       path: "/getting-started.html",
       requiredSelectors: [
         "h1",
@@ -103,6 +110,17 @@ try {
 
       for (const selector of pageDefinition.requiredSelectors) {
         await assert.doesNotReject(() => page.locator(selector).first().waitFor());
+      }
+
+      for (const [beforeSelector, afterSelector] of pageDefinition.minimumVerticalGaps) {
+        const beforeBox = await page.locator(beforeSelector).boundingBox();
+        const afterBox = await page.locator(afterSelector).boundingBox();
+        assert(beforeBox, `${beforeSelector} should have a layout box`);
+        assert(afterBox, `${afterSelector} should have a layout box`);
+        assert(
+          afterBox.y - (beforeBox.y + beforeBox.height) >= 12,
+          `${beforeSelector} and ${afterSelector} should have a visible vertical gap`,
+        );
       }
 
       assert.equal(errors.length, 0, `browser console errors: ${errors.join("; ")}`);
