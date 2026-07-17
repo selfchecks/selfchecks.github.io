@@ -9,10 +9,12 @@ Website:
 ## What is here
 
 - `index.html` - landing page markup
-- `getting-started.html` - public setup, API, CI/CD, and self-hosting guide
+- `getting-started.html` - public setup through `npx create-selfchecks`, npm
+  packages, Checkly migration, API, CI/CD, and self-hosting guide
 - `styles.css` - visual styles
 - `app.js` - small client-side interactions
-- `assets/` - generated product mockups and social images
+- `assets/` - optimized product screenshots, generated hero art, and social
+  images
 - `robots.txt`, `sitemap.xml`, `llms.txt` - crawl and discovery files
 
 ## Local preview

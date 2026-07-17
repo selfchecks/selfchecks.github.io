@@ -14,6 +14,19 @@ a project, configuring Playwright and Checkly-compatible manifests, writing API
 and browser checks, selecting test modules, using the authenticated HTTP API,
 setting up GitLab CI/CD and GitHub Actions, and deploying a Selfchecks server.
 
+## npm packages
+
+- `create-selfchecks`: project generator, run as `npx create-selfchecks`.
+- `@selfchecks/selfchecks-cli`: remote `selfchecks` CLI for deploy, test, and trigger.
+- `@selfchecks/selfchecks`: supported checks-as-code constructs.
+
+The fastest start is `npx create-selfchecks my-checks`. It creates and installs a
+minimal project with one Playwright browser check for
+`https://selfchecks.github.io/`.
+
+Projects migrating from Checkly can keep their existing import specifiers with
+the npm alias `"checkly": "npm:@selfchecks/selfchecks@0.1.0"`.
+
 ## Positioning
 
 Selfchecks keeps a repository-owned checks-as-code workflow while replacing a
@@ -27,6 +40,18 @@ feature, not the core identity of the product.
 - `selfchecks deploy --force`
 - `selfchecks test --reporter=github --record`
 - `selfchecks trigger --reporter=github --retries=1 --record`
+
+## Checkly migration subset
+
+Supported from `checkly`: `defineConfig`.
+
+Supported from `checkly/constructs`: `ApiCheck`, `BrowserCheck`, `CheckGroup`,
+`CheckGroupV2`, the documented `Frequency` constants, `AssertionBuilder`,
+`RetryStrategyBuilder`, `AlertEscalationBuilder.runBasedEscalation`,
+`WebhookAlertChannel`, and the related props/request types. Compatibility is
+intentionally narrow. Assertion builder expressions, alert channels, and
+escalation objects provide source compatibility but are not deployed by the
+current importer. Other Checkly APIs and runtime behavior are unsupported.
 
 ## Remote CI flow
 

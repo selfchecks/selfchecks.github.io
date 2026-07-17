@@ -17,7 +17,10 @@
       content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
     />
     <meta name="theme-color" content="#06110f" />
-    <link rel="canonical" href="https://selfchecks.github.io/getting-started.html" />
+    <link
+      rel="canonical"
+      href="https://selfchecks.github.io/getting-started.html"
+    />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <link
@@ -34,8 +37,14 @@
       property="og:description"
       content="A complete guide to creating, testing, deploying, and automating a Selfchecks project."
     />
-    <meta property="og:url" content="https://selfchecks.github.io/getting-started.html" />
-    <meta property="og:image" content="https://selfchecks.github.io/og-card.png" />
+    <meta
+      property="og:url"
+      content="https://selfchecks.github.io/getting-started.html"
+    />
+    <meta
+      property="og:image"
+      content="https://selfchecks.github.io/og-card.png"
+    />
     <meta
       property="og:image:alt"
       content="Selfchecks social card showing a synthetic monitoring dashboard and checks as code workflow."
@@ -46,7 +55,10 @@
       name="twitter:description"
       content="Create checks as code, connect CI/CD, use the HTTP API, and run Selfchecks on your own server."
     />
-    <meta name="twitter:image" content="https://selfchecks.github.io/og-card.png" />
+    <meta
+      name="twitter:image"
+      content="https://selfchecks.github.io/og-card.png"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -95,8 +107,13 @@
         </a>
 
         <div class="topbar-actions">
-          <a aria-current="page" href="./getting-started.html">Getting started</a>
-          <a href="https://github.com/selfchecks/selfchecks" target="_blank" rel="noreferrer"
+          <a aria-current="page" href="./getting-started.html"
+            >Getting started</a
+          >
+          <a
+            href="https://github.com/selfchecks/selfchecks"
+            target="_blank"
+            rel="noreferrer"
             >GitHub</a
           >
         </div>
@@ -112,6 +129,7 @@
           <li><a href="#browser-tests">Browser tests</a></li>
           <li><a href="#api-tests">API tests</a></li>
           <li><a href="#modules">Test modules</a></li>
+          <li><a href="#migration">Migrate from Checkly</a></li>
           <li><a href="#deploy">Deploy and run</a></li>
           <li><a href="#http-api">HTTP API</a></li>
           <li><a href="#gitlab-ci">GitLab CI/CD</a></li>
@@ -125,14 +143,26 @@
           <p class="eyebrow">From an empty folder to a scheduled check</p>
           <h1>Create your first Selfchecks project</h1>
           <p>
-            Keep monitoring next to your application code, run the same checks in CI, and
-            deploy them to your own Selfchecks server.
+            Keep monitoring next to your application code, run the same checks
+            in CI, and deploy them to your own Selfchecks server.
           </p>
           <ol class="docs-steps" aria-label="Getting started flow">
-            <li><span>01</span><strong>Create</strong><small>Scaffold a Node.js project</small></li>
-            <li><span>02</span><strong>Configure</strong><small>Set project defaults</small></li>
-            <li><span>03</span><strong>Test</strong><small>Add API and browser checks</small></li>
-            <li><span>04</span><strong>Deploy</strong><small>Upload to your server</small></li>
+            <li>
+              <span>01</span><strong>Create</strong
+              ><small>Scaffold a Node.js project</small>
+            </li>
+            <li>
+              <span>02</span><strong>Configure</strong
+              ><small>Set project defaults</small>
+            </li>
+            <li>
+              <span>03</span><strong>Test</strong
+              ><small>Add API and browser checks</small>
+            </li>
+            <li>
+              <span>04</span><strong>Deploy</strong
+              ><small>Upload to your server</small>
+            </li>
           </ol>
         </header>
 
@@ -141,21 +171,26 @@
             <p class="eyebrow">Step 1</p>
             <h2>Create the project</h2>
             <p>
-              Selfchecks scans the project recursively for <code>.check.ts</code> manifests.
-              Keep Playwright specs and their manifests together so entrypoints remain clear.
+              Selfchecks scans the project recursively for
+              <code>.check.ts</code> manifests. Keep Playwright specs and their
+              manifests together so entrypoints remain clear.
             </p>
           </div>
           <article class="code-card">
             <div class="code-card-header">
               <span>Terminal</span>
-              <button class="copy-button" type="button" data-copy-target="project-create">
+              <button
+                class="copy-button"
+                type="button"
+                data-copy-target="project-create"
+              >
                 Copy
               </button>
             </div>
-            <pre><code id="project-create" data-lang="shell">mkdir my-checks &amp;&amp; cd my-checks
-npm init -y
-npm install @playwright/test@1.58.2 checkly@8.16.0
-mkdir checks</code></pre>
+            <pre><code id="project-create" data-lang="shell">npx create-selfchecks my-checks
+cd my-checks
+npx playwright install chromium
+npm test</code></pre>
           </article>
           <div class="docs-grid">
             <article class="code-card">
@@ -166,19 +201,27 @@ mkdir checks</code></pre>
 ├── checkly.config.ts
 └── checks/
     ├── homepage.check.ts
-    ├── homepage.spec.ts
-    └── health.check.ts</code></pre>
+    └── homepage.spec.ts</code></pre>
             </article>
             <aside class="guide-note">
               <h3>Prerequisites and upload limits</h3>
               <p>
-                Use Node.js <code>20.19</code> or newer, commit the generated lockfile, and
-                install Docker for the CLI workflow below.
+                Use Node.js <code>20.19</code> or newer and commit the generated
+                lockfile. Docker is required only on the server, not in a
+                project CI job.
               </p>
               <p>
-                Source, configuration, lockfiles, and production dependencies are uploaded.
-                <code>node_modules</code>, <code>.env*</code>, reports, and previous artifacts
-                are excluded. A bundle can contain up to 10,000 files and 40 MB.
+                Running <code>npx create-selfchecks</code> without a directory
+                creates <code>./selfchecks-project</code>. Use
+                <code>--skip-install</code> to generate files without running
+                <code>npm install</code>.
+              </p>
+              <p>
+                Source, configuration, lockfiles, and production dependencies
+                are uploaded.
+                <code>node_modules</code>, <code>.env*</code>, reports, and
+                previous artifacts are excluded. A bundle can contain up to
+                10,000 files and 40 MB.
               </p>
             </aside>
           </div>
@@ -189,15 +232,20 @@ mkdir checks</code></pre>
             <p class="eyebrow">Step 2</p>
             <h2>Add configuration</h2>
             <p>
-              Playwright controls test behavior. The Checkly-compatible config defines
-              project discovery and scheduling defaults using the current construct API.
+              Playwright controls test behavior. The Checkly-compatible config
+              defines project discovery and scheduling defaults using the
+              current construct API.
             </p>
           </div>
           <div class="docs-grid">
             <article class="code-card">
               <div class="code-card-header">
                 <span>playwright.config.ts</span>
-                <button class="copy-button" type="button" data-copy-target="playwright-config">
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="playwright-config"
+                >
                   Copy
                 </button>
               </div>
@@ -215,12 +263,16 @@ export default defineConfig({
             <article class="code-card">
               <div class="code-card-header">
                 <span>checkly.config.ts</span>
-                <button class="copy-button" type="button" data-copy-target="checkly-config">
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="checkly-config"
+                >
                   Copy
                 </button>
               </div>
-              <pre><code id="checkly-config" data-lang="ts">import { defineConfig } from "checkly";
-import { Frequency } from "checkly/constructs";
+              <pre><code id="checkly-config" data-lang="ts">import { defineConfig } from "@selfchecks/selfchecks";
+import { Frequency } from "@selfchecks/selfchecks/constructs";
 
 export default defineConfig({
   projectName: "My checks",
@@ -241,9 +293,11 @@ export default defineConfig({
           <aside class="guide-note">
             <h3>Runtime values</h3>
             <p>
-              Do not commit secrets or environment-specific URLs. Pass values with
-              <code>-e NAME=value</code> or <code>SELFCHECKS_ENV_JSON</code>. API check URLs
-              support placeholders such as <code>{{ENVIRONMENT_URL}}</code>.
+              Do not commit secrets or environment-specific URLs. Pass values
+              with
+              <code>-e NAME=value</code> or <code>SELFCHECKS_ENV_JSON</code>.
+              API check URLs support placeholders such as
+              <code>{{ENVIRONMENT_URL}}</code>.
             </p>
           </aside>
         </section>
@@ -253,20 +307,25 @@ export default defineConfig({
             <p class="eyebrow">Step 3</p>
             <h2>Write a browser check</h2>
             <p>
-              A browser check is a small manifest pointing to a normal Playwright Test spec.
-              Selfchecks runs it in Chromium and records logs, screenshots, traces, videos,
-              and performance data when available.
+              A browser check is a small manifest pointing to a normal
+              Playwright Test spec. Selfchecks runs it in Chromium and records
+              logs, screenshots, traces, videos, and performance data when
+              available.
             </p>
           </div>
           <div class="docs-grid">
             <article class="code-card">
               <div class="code-card-header">
                 <span>checks/homepage.check.ts</span>
-                <button class="copy-button" type="button" data-copy-target="browser-check">
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="browser-check"
+                >
                   Copy
                 </button>
               </div>
-              <pre><code id="browser-check" data-lang="ts">import { BrowserCheck, Frequency } from "checkly/constructs";
+              <pre><code id="browser-check" data-lang="ts">import { BrowserCheck, Frequency } from "@selfchecks/selfchecks/constructs";
 
 new BrowserCheck("homepage", {
   name: "Homepage",
@@ -281,7 +340,11 @@ new BrowserCheck("homepage", {
             <article class="code-card">
               <div class="code-card-header">
                 <span>checks/homepage.spec.ts</span>
-                <button class="copy-button" type="button" data-copy-target="browser-spec">
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="browser-spec"
+                >
                   Copy
                 </button>
               </div>
@@ -294,6 +357,28 @@ test("homepage is available", async ({ page }) => {
 });</code></pre>
             </article>
           </div>
+          <figure class="docs-screenshot">
+            <a
+              class="screenshot-link"
+              href="./assets/product-run-detail.webp"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Open the recorded browser run screenshot at full size"
+            >
+              <img
+                src="./assets/product-run-detail.webp"
+                alt="Selfchecks browser run report showing duration, error counts, the Playwright test report, traces, and logs."
+                width="1920"
+                height="1265"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+            <figcaption>
+              A recorded browser run keeps the Playwright report, traces, logs,
+              screenshots, videos, and error counts next to the result.
+            </figcaption>
+          </figure>
         </section>
 
         <section class="guide-section" id="api-tests">
@@ -301,25 +386,36 @@ test("homepage is available", async ({ page }) => {
             <p class="eyebrow">API checks</p>
             <h2>Choose the right API testing style</h2>
             <p>
-              Use a native <code>ApiCheck</code> for a lightweight endpoint monitor or the
-              Playwright <code>request</code> fixture for richer assertions and multi-step flows.
+              Use a native <code>ApiCheck</code> for a lightweight endpoint
+              monitor or the Playwright <code>request</code> fixture for richer
+              assertions and multi-step flows.
             </p>
           </div>
           <div class="table-wrap">
             <table>
               <thead>
-                <tr><th>Option</th><th>Use it for</th><th>Available API</th></tr>
+                <tr>
+                  <th>Option</th>
+                  <th>Use it for</th>
+                  <th>Available API</th>
+                </tr>
               </thead>
               <tbody>
                 <tr>
                   <th>ApiCheck</th>
                   <td>Fast health and HTTP status checks</td>
-                  <td>Method, URL, headers, body, and <code>{{ENV}}</code> placeholders</td>
+                  <td>
+                    Method, URL, headers, body, and
+                    <code>{{ENV}}</code> placeholders
+                  </td>
                 </tr>
                 <tr>
                   <th>Playwright request</th>
                   <td>JSON assertions and multi-step API flows</td>
-                  <td><code>test</code>, <code>expect</code>, request fixture, hooks, and helpers</td>
+                  <td>
+                    <code>test</code>, <code>expect</code>, request fixture,
+                    hooks, and helpers
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -328,15 +424,21 @@ test("homepage is available", async ({ page }) => {
             <article class="code-card">
               <div class="code-card-header">
                 <span>checks/health.check.ts</span>
-                <button class="copy-button" type="button" data-copy-target="api-check">Copy</button>
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="api-check"
+                >
+                  Copy
+                </button>
               </div>
-              <pre><code id="api-check" data-lang="ts">import { ApiCheck, Frequency } from "checkly/constructs";
+              <pre><code id="api-check" data-lang="ts">import { ApiCheck, Frequency } from "@selfchecks/selfchecks/constructs";
 
 new ApiCheck("api-health", {
   name: "API health",
   activated: true,
   tags: ["smoke", "api"],
-  frequency: Frequency.EVERY_5M,
+  frequency: Frequency.EVERY_10M,
   request: {
     method: "GET",
     url: "{{ENVIRONMENT_URL}}/api/health",
@@ -349,13 +451,14 @@ new ApiCheck("api-health", {
             <aside class="guide-note">
               <h3>Current ApiCheck result model</h3>
               <p>
-                Native API checks pass for an HTTP <code>2xx</code> response and fail for
-                other statuses or network errors. AssertionBuilder data can be imported for
-                compatibility, but the runner does not evaluate it yet.
+                Native API checks pass for an HTTP <code>2xx</code> response and
+                fail for other statuses or network errors. AssertionBuilder data
+                can be imported for compatibility, but the runner does not
+                evaluate it yet.
               </p>
               <p>
-                Use Playwright's <code>request</code> fixture and <code>expect</code> for body,
-                schema, or header assertions.
+                Use Playwright's <code>request</code> fixture and
+                <code>expect</code> for body, schema, or header assertions.
               </p>
             </aside>
           </div>
@@ -371,17 +474,144 @@ new ApiCheck("api-health", {
             </p>
           </div>
           <div class="module-grid">
-            <article><h3>Playwright Test</h3><p><code>test</code>, <code>expect</code>, page, context, request, fixtures, and hooks.</p></article>
-            <article><h3>Node.js built-ins</h3><p>Modules such as <code>node:crypto</code>, <code>node:fs</code>, <code>node:path</code>, and <code>node:url</code>.</p></article>
-            <article><h3>Your local modules</h3><p>Relative TypeScript or JavaScript helpers included in the uploaded project.</p></article>
-            <article><h3>npm packages</h3><p>Packages in <code>dependencies</code> that support the server's Linux and Node.js runtime.</p></article>
+            <article>
+              <h3>Playwright Test</h3>
+              <p>
+                <code>test</code>, <code>expect</code>, page, context, request,
+                fixtures, and hooks.
+              </p>
+            </article>
+            <article>
+              <h3>Node.js built-ins</h3>
+              <p>
+                Modules such as <code>node:crypto</code>, <code>node:fs</code>,
+                <code>node:path</code>, and <code>node:url</code>.
+              </p>
+            </article>
+            <article>
+              <h3>Your local modules</h3>
+              <p>
+                Relative TypeScript or JavaScript helpers included in the
+                uploaded project.
+              </p>
+            </article>
+            <article>
+              <h3>npm packages</h3>
+              <p>
+                Packages in <code>dependencies</code> that support the server's
+                Linux and Node.js runtime.
+              </p>
+            </article>
           </div>
           <aside class="guide-note">
             <h3>Production dependencies only</h3>
             <p>
               Put runtime packages in <code>dependencies</code>, not only in
               <code>devDependencies</code>. The server runs
-              <code>npm install --omit=dev</code> before an uploaded deployment or test session.
+              <code>npm install --omit=dev</code> before an uploaded deployment
+              or test session.
+            </p>
+          </aside>
+        </section>
+
+        <section class="guide-section" id="migration">
+          <div class="guide-heading">
+            <p class="eyebrow">Migration</p>
+            <h2>Keep existing Checkly imports</h2>
+            <p>
+              You do not have to rewrite every manifest. npm can install the
+              Selfchecks constructs package under the local name
+              <code>checkly</code>, so existing <code>checkly</code> and
+              <code>checkly/constructs</code> imports remain valid.
+            </p>
+          </div>
+          <article class="code-card">
+            <div class="code-card-header">
+              <span>package.json</span>
+              <button
+                class="copy-button"
+                type="button"
+                data-copy-target="migration-package"
+              >
+                Copy
+              </button>
+            </div>
+            <pre><code id="migration-package" data-lang="json">{
+  "devDependencies": {
+    "@selfchecks/selfchecks-cli": "0.1.0",
+    "checkly": "npm:@selfchecks/selfchecks@0.1.0"
+  },
+  "scripts": {
+    "selfchecks": "selfchecks"
+  }
+}</code></pre>
+          </article>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Import</th>
+                  <th>Supported subset</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th><code>checkly</code></th>
+                  <td><code>defineConfig</code></td>
+                </tr>
+                <tr>
+                  <th>Checks</th>
+                  <td><code>ApiCheck</code>, <code>BrowserCheck</code></td>
+                </tr>
+                <tr>
+                  <th>Groups</th>
+                  <td><code>CheckGroup</code>, <code>CheckGroupV2</code></td>
+                </tr>
+                <tr>
+                  <th>Frequency</th>
+                  <td>
+                    <code>EVERY_10M</code>, <code>EVERY_15M</code>,
+                    <code>EVERY_30M</code>, <code>EVERY_2H</code>,
+                    <code>EVERY_3H</code>, <code>EVERY_6H</code>,
+                    <code>EVERY_12H</code>, <code>EVERY_24H</code>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Assertions</th>
+                  <td>
+                    <code>statusCode()</code>, <code>textBody()</code>,
+                    <code>jsonBody(path)</code> with <code>equals</code>,
+                    <code>contains</code>, <code>isEmpty</code>,
+                    <code>isNotNull</code>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Retries</th>
+                  <td>
+                    <code>noRetries</code>, <code>fixedStrategy</code>,
+                    <code>linearStrategy</code>,
+                    <code>exponentialStrategy</code>
+                  </td>
+                </tr>
+                <tr>
+                  <th>Source compatibility</th>
+                  <td>
+                    <code>AlertEscalationBuilder.runBasedEscalation</code>,
+                    <code>WebhookAlertChannel</code>, and the related
+                    props/request types
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <aside class="guide-note guide-note-accent">
+            <h3>This is a narrow compatibility layer</h3>
+            <p>
+              Assertion builder expressions, alert channels, and escalation
+              objects compile but are not deployed by the current importer;
+              configure API validation and notifications in Selfchecks. Other
+              Checkly constructs, CLI commands, Cloud APIs, and runtime behavior
+              are not supported.
             </p>
           </aside>
         </section>
@@ -391,34 +621,37 @@ new ApiCheck("api-health", {
             <p class="eyebrow">Step 4</p>
             <h2>Deploy and run</h2>
             <p>
-              Use <code>deploy</code> for the version scheduled checks should run,
-              <code>test</code> for an isolated CI session, and <code>trigger</code> to run
-              the latest deployment.
+              Use <code>deploy</code> for the version scheduled checks should
+              run, <code>test</code> for an isolated CI session, and
+              <code>trigger</code> to run the latest deployment.
             </p>
           </div>
           <article class="code-card">
             <div class="code-card-header">
               <span>One-time CLI setup</span>
-              <button class="copy-button" type="button" data-copy-target="cli-setup">Copy</button>
+              <button
+                class="copy-button"
+                type="button"
+                data-copy-target="cli-setup"
+              >
+                Copy
+              </button>
             </div>
             <pre><code id="cli-setup" data-lang="shell">export SELFCHECKS_URL="https://checks.example.com"
 export SELFCHECKS_API_TOKEN="&lt;api-token&gt;"
 
-selfchecks() {
-  docker run --rm --entrypoint selfchecks \
-    --env SELFCHECKS_URL \
-    --env SELFCHECKS_API_TOKEN \
-    --volume "$PWD:/workspace" \
-    --workdir /workspace \
-    ghcr.io/selfchecks/selfchecks-cli:stable "$@"
-}
-
-selfchecks --help</code></pre>
+npx selfchecks --help</code></pre>
           </article>
           <article class="code-card">
             <div class="code-card-header">
               <span>Deploy and execute</span>
-              <button class="copy-button" type="button" data-copy-target="cli-run">Copy</button>
+              <button
+                class="copy-button"
+                type="button"
+                data-copy-target="cli-run"
+              >
+                Copy
+              </button>
             </div>
             <pre><code id="cli-run" data-lang="shell"># Upload the project and schedule its checks
 selfchecks deploy --project my-project --root .
@@ -431,13 +664,36 @@ selfchecks test --project my-project --root . --record \
 selfchecks trigger --project my-project --record</code></pre>
           </article>
           <aside class="guide-note">
-            <h3>CLI container</h3>
+            <h3>npm CLI</h3>
             <p>
-              The public multi-architecture image contains the remote client, while browser
-              and API checks execute on your server. Pin a <code>sha-…</code> image tag when
-              an immutable production toolchain is required.
+              <code>@selfchecks/selfchecks-cli</code> is a remote-only client.
+              Browser and API checks execute on your server, so CI needs Node.js
+              but does not need the Selfchecks Docker image or a local browser
+              installation.
             </p>
           </aside>
+          <figure class="docs-screenshot">
+            <a
+              class="screenshot-link"
+              href="./assets/product-test-sessions.webp"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Open the Selfchecks test sessions screenshot at full size"
+            >
+              <img
+                src="./assets/product-test-sessions.webp"
+                alt="Selfchecks test sessions list showing CI release sessions with passed, failed, timed out, and cancelled results."
+                width="1920"
+                height="1265"
+                loading="lazy"
+                decoding="async"
+              />
+            </a>
+            <figcaption>
+              Recorded CI runs appear as test sessions with project, duration,
+              and passed, failed, running, or queued counts.
+            </figcaption>
+          </figure>
         </section>
 
         <section class="guide-section" id="http-api">
@@ -445,15 +701,20 @@ selfchecks trigger --project my-project --record</code></pre>
             <p class="eyebrow">Integration</p>
             <h2>Use the HTTP API directly</h2>
             <p>
-              The CLI is a client for the authenticated Selfchecks HTTP API. Call it directly
-              to trigger a deployment, inspect status, or build another integration.
+              The CLI is a client for the authenticated Selfchecks HTTP API.
+              Call it directly to trigger a deployment, inspect status, or build
+              another integration.
             </p>
           </div>
           <div class="docs-grid">
             <article class="code-card">
               <div class="code-card-header">
                 <span>Trigger a deployed project</span>
-                <button class="copy-button" type="button" data-copy-target="api-trigger">
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="api-trigger"
+                >
                   Copy
                 </button>
               </div>
@@ -485,22 +746,55 @@ selfchecks trigger --project my-project --record</code></pre>
               <aside class="guide-note">
                 <h3>Authentication</h3>
                 <p>
-                  Send <code>Authorization: Bearer &lt;token&gt;</code> with every request.
-                  Use <code>SELFCHECKS_API_TOKEN</code> or an API key created in Settings.
+                  Send <code>Authorization: Bearer &lt;token&gt;</code> with
+                  every request. Use <code>SELFCHECKS_API_TOKEN</code> or an API
+                  key created in Settings.
                 </p>
               </aside>
             </div>
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Method</th><th>Endpoint</th><th>Purpose</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>Method</th>
+                  <th>Endpoint</th>
+                  <th>Purpose</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr><th>POST</th><td><code>/api/cli/deployments</code></td><td>Upload a multipart project bundle and queue a deployment</td></tr>
-                <tr><th>GET</th><td><code>/api/cli/deployments/:deploymentId</code></td><td>Read deployment status and import summary</td></tr>
-                <tr><th>POST</th><td><code>/api/cli/test-sessions</code></td><td>Upload source and start a recorded test session</td></tr>
-                <tr><th>GET · DELETE</th><td><code>/api/cli/test-sessions/:sessionId</code></td><td>Read results or cancel an active session</td></tr>
-                <tr><th>POST</th><td><code>/api/cli/triggers</code></td><td>Run the latest deployed source for a project</td></tr>
-                <tr><th>GET</th><td><code>/api/cli/triggers/:triggerId</code></td><td>Read trigger status and final run summary</td></tr>
+                <tr>
+                  <th>POST</th>
+                  <td><code>/api/cli/deployments</code></td>
+                  <td>
+                    Upload a multipart project bundle and queue a deployment
+                  </td>
+                </tr>
+                <tr>
+                  <th>GET</th>
+                  <td><code>/api/cli/deployments/:deploymentId</code></td>
+                  <td>Read deployment status and import summary</td>
+                </tr>
+                <tr>
+                  <th>POST</th>
+                  <td><code>/api/cli/test-sessions</code></td>
+                  <td>Upload source and start a recorded test session</td>
+                </tr>
+                <tr>
+                  <th>GET · DELETE</th>
+                  <td><code>/api/cli/test-sessions/:sessionId</code></td>
+                  <td>Read results or cancel an active session</td>
+                </tr>
+                <tr>
+                  <th>POST</th>
+                  <td><code>/api/cli/triggers</code></td>
+                  <td>Run the latest deployed source for a project</td>
+                </tr>
+                <tr>
+                  <th>GET</th>
+                  <td><code>/api/cli/triggers/:triggerId</code></td>
+                  <td>Read trigger status and final run summary</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -508,18 +802,20 @@ selfchecks trigger --project my-project --record</code></pre>
             <aside class="guide-note">
               <h3>Multipart uploads</h3>
               <p>
-                Deployment and test-session requests use <code>multipart/form-data</code>
-                with JSON <code>metadata</code>, a JSON <code>manifest</code> array, and
-                numbered <code>file-0</code>, <code>file-1</code> parts. Prefer the CLI for
-                constructing bundles.
+                Deployment and test-session requests use
+                <code>multipart/form-data</code> with JSON
+                <code>metadata</code>, a JSON <code>manifest</code> array, and
+                numbered <code>file-0</code>, <code>file-1</code> parts. Prefer
+                the CLI for constructing bundles.
               </p>
             </aside>
             <aside class="guide-note">
               <h3>Status and errors</h3>
               <p>
-                Create requests return <code>202</code>. Common errors are <code>400</code>,
-                <code>401</code>, <code>404</code>, <code>422</code>, and <code>503</code>.
-                Poll the returned <code>statusUrl</code> until the operation is terminal.
+                Create requests return <code>202</code>. Common errors are
+                <code>400</code>, <code>401</code>, <code>404</code>,
+                <code>422</code>, and <code>503</code>. Poll the returned
+                <code>statusUrl</code> until the operation is terminal.
               </p>
             </aside>
           </div>
@@ -530,14 +826,19 @@ selfchecks trigger --project my-project --record</code></pre>
             <p class="eyebrow">CI/CD</p>
             <h2>Set up GitLab CI/CD</h2>
             <p>
-              Run the current commit for merge requests and the default branch, then deploy
-              the successful default-branch revision for scheduled monitoring.
+              Run the current commit for merge requests and the default branch,
+              then deploy the successful default-branch revision for scheduled
+              monitoring.
             </p>
           </div>
           <article class="code-card">
             <div class="code-card-header">
               <span>.gitlab-ci.yml</span>
-              <button class="copy-button" type="button" data-copy-target="gitlab-config">
+              <button
+                class="copy-button"
+                type="button"
+                data-copy-target="gitlab-config"
+              >
                 Copy
               </button>
             </div>
@@ -546,15 +847,15 @@ selfchecks trigger --project my-project --record</code></pre>
   - deploy
 
 default:
-  image:
-    name: ghcr.io/selfchecks/selfchecks-cli:stable
-    entrypoint: [""]
+  image: node:20.19
+  before_script:
+    - npm ci
 
 selfchecks:test:
   stage: test
   script:
     - &gt;-
-      selfchecks test
+      npx selfchecks test
       --project "$CI_PROJECT_PATH_SLUG"
       --root .
       --record
@@ -574,7 +875,7 @@ selfchecks:deploy:
   stage: deploy
   needs: ["selfchecks:test"]
   script:
-    - selfchecks deploy --project "$CI_PROJECT_PATH_SLUG" --root .
+    - npx selfchecks deploy --project "$CI_PROJECT_PATH_SLUG" --root .
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'</code></pre>
           </article>
@@ -582,9 +883,10 @@ selfchecks:deploy:
             <h3>Project variables</h3>
             <p>
               Add <code>SELFCHECKS_URL</code>, masked
-              <code>SELFCHECKS_API_TOKEN</code>, and <code>ENVIRONMENT_URL</code> under
-              Settings → CI/CD → Variables. Never expose an unprotected token to pipelines
-              from untrusted forks.
+              <code>SELFCHECKS_API_TOKEN</code>, and
+              <code>ENVIRONMENT_URL</code> under Settings → CI/CD → Variables.
+              Never expose an unprotected token to pipelines from untrusted
+              forks.
             </p>
           </aside>
         </section>
@@ -594,14 +896,18 @@ selfchecks:deploy:
             <p class="eyebrow">CI/CD</p>
             <h2>Set up GitHub Actions</h2>
             <p>
-              Run checks for pull requests and <code>main</code>, then deploy the main
-              revision after the test job succeeds.
+              Run checks for pull requests and <code>main</code>, then deploy
+              the main revision after the test job succeeds.
             </p>
           </div>
           <article class="code-card">
             <div class="code-card-header">
               <span>.github/workflows/selfchecks.yml</span>
-              <button class="copy-button" type="button" data-copy-target="github-config">
+              <button
+                class="copy-button"
+                type="button"
+                data-copy-target="github-config"
+              >
                 Copy
               </button>
             </div>
@@ -619,16 +925,20 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: ghcr.io/selfchecks/selfchecks-cli:stable
     env:
       SELFCHECKS_URL: ${{ vars.SELFCHECKS_URL }}
       SELFCHECKS_API_TOKEN: ${{ secrets.SELFCHECKS_API_TOKEN }}
       ENVIRONMENT_URL: ${{ vars.ENVIRONMENT_URL }}
     steps:
       - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
       - name: Run Selfchecks
         run: &gt;-
-          selfchecks test
+          npx selfchecks test
           --project "$GITHUB_REPOSITORY"
           --root .
           --record
@@ -644,20 +954,25 @@ jobs:
     if: github.event_name == 'push' &amp;&amp; github.ref == 'refs/heads/main'
     needs: test
     runs-on: ubuntu-latest
-    container: ghcr.io/selfchecks/selfchecks-cli:stable
     env:
       SELFCHECKS_URL: ${{ vars.SELFCHECKS_URL }}
       SELFCHECKS_API_TOKEN: ${{ secrets.SELFCHECKS_API_TOKEN }}
     steps:
       - uses: actions/checkout@v6
-      - run: selfchecks deploy --project "$GITHUB_REPOSITORY" --root .</code></pre>
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npx selfchecks deploy --project "$GITHUB_REPOSITORY" --root .</code></pre>
           </article>
           <aside class="guide-note">
             <h3>Repository settings</h3>
             <p>
-              Add the URL and environment as Actions variables and the token as an Actions
-              secret. GitHub does not pass repository secrets to workflows opened from forks.
-              Replace <code>main</code> in both places if your default branch has another name.
+              Add the URL and environment as Actions variables and the token as
+              an Actions secret. GitHub does not pass repository secrets to
+              workflows opened from forks. Replace <code>main</code> in both
+              places if your default branch has another name.
             </p>
           </aside>
         </section>
@@ -667,15 +982,19 @@ jobs:
             <p class="eyebrow">Self-hosting</p>
             <h2>Deploy your own server</h2>
             <p>
-              Selfchecks ships as a Docker Compose stack with the web app, worker,
-              PostgreSQL, Redis, migrations, and Caddy for HTTPS.
+              Selfchecks ships as a Docker Compose stack with the web app,
+              worker, PostgreSQL, Redis, migrations, and Caddy for HTTPS.
             </p>
           </div>
           <div class="docs-grid">
             <article class="code-card">
               <div class="code-card-header">
                 <span>Linux server</span>
-                <button class="copy-button" type="button" data-copy-target="server-install">
+                <button
+                  class="copy-button"
+                  type="button"
+                  data-copy-target="server-install"
+                >
                   Copy
                 </button>
               </div>
@@ -699,11 +1018,12 @@ sudo grep '^SELFCHECKS_SETUP_TOKEN=' /opt/selfchecks/.env</code></pre>
           <aside class="guide-note guide-note-accent">
             <h3>Complete first-launch setup</h3>
             <p>
-              Open <code>http://&lt;server-ip&gt;/setup</code>, enter the printed setup
-              token, then configure the domain, certificate email, admin login, and password.
-              Caddy reloads and requests the TLS certificate after setup. Read
-              <code>SELFCHECKS_API_TOKEN</code> from <code>/opt/selfchecks/.env</code> for
-              CLI access.
+              Open <code>http://&lt;server-ip&gt;/setup</code>, enter the
+              printed setup token, then configure the domain, certificate email,
+              admin login, and password. Caddy reloads and requests the TLS
+              certificate after setup. Read
+              <code>SELFCHECKS_API_TOKEN</code> from
+              <code>/opt/selfchecks/.env</code> for CLI access.
             </p>
           </aside>
         </section>
@@ -729,7 +1049,10 @@ sudo grep '^SELFCHECKS_SETUP_TOKEN=' /opt/selfchecks/.env</code></pre>
       </div>
       <div class="footer-links">
         <a href="./">Home</a>
-        <a href="https://github.com/selfchecks/selfchecks" target="_blank" rel="noreferrer"
+        <a
+          href="https://github.com/selfchecks/selfchecks"
+          target="_blank"
+          rel="noreferrer"
           >GitHub</a
         >
         <a href="./llms.txt">LLMs</a>

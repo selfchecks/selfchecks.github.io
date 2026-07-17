@@ -35,9 +35,20 @@ body {
   min-height: 100vh;
   color: var(--text);
   background:
-    linear-gradient(180deg, rgba(6, 17, 15, 0.92) 0%, rgba(2, 6, 5, 0.96) 42%, #020605 100%),
+    linear-gradient(
+      180deg,
+      rgba(6, 17, 15, 0.92) 0%,
+      rgba(2, 6, 5, 0.96) 42%,
+      #020605 100%
+    ),
     var(--bg-deep);
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
 body::selection {
@@ -59,7 +70,9 @@ pre,
 .signal-strip dt,
 .workflow-step span,
 .feature-icon {
-  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-family:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
 }
 
 .skip-link {
@@ -107,8 +120,18 @@ pre,
 .hero-backdrop::before {
   z-index: 1;
   background:
-    linear-gradient(90deg, rgba(2, 6, 5, 0.92) 0%, rgba(2, 6, 5, 0.72) 34%, rgba(2, 6, 5, 0.24) 72%),
-    linear-gradient(180deg, rgba(2, 6, 5, 0.08) 0%, rgba(2, 6, 5, 0.42) 72%, rgba(2, 6, 5, 0.86) 100%);
+    linear-gradient(
+      90deg,
+      rgba(2, 6, 5, 0.92) 0%,
+      rgba(2, 6, 5, 0.72) 34%,
+      rgba(2, 6, 5, 0.24) 72%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(2, 6, 5, 0.08) 0%,
+      rgba(2, 6, 5, 0.42) 72%,
+      rgba(2, 6, 5, 0.86) 100%
+    );
 }
 
 .hero-backdrop::after {
@@ -154,7 +177,11 @@ pre,
   border: 1px solid rgba(95, 242, 160, 0.34);
   border-radius: var(--radius);
   background:
-    linear-gradient(135deg, rgba(95, 242, 160, 0.22), rgba(118, 228, 255, 0.08)),
+    linear-gradient(
+      135deg,
+      rgba(95, 242, 160, 0.22),
+      rgba(118, 228, 255, 0.08)
+    ),
     rgba(7, 18, 16, 0.84);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
@@ -255,6 +282,31 @@ pre,
   font-size: clamp(1.08rem, 2vw, 1.32rem);
   font-weight: 500;
   line-height: 1.68;
+}
+
+.hero-command {
+  display: flex;
+  width: min(100%, 28rem);
+  min-height: 3.5rem;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 0.55rem 0.65rem 0.55rem 1rem;
+  background: rgba(4, 16, 12, 0.72);
+  box-shadow: var(--shadow);
+}
+
+.hero-command > span {
+  color: var(--green);
+  font-weight: 900;
+}
+
+.hero-command code {
+  flex: 1;
+  font-size: 0.94rem;
+  font-weight: 800;
 }
 
 .hero-actions {
@@ -459,7 +511,11 @@ pre,
   position: absolute;
   inset: 0;
   content: "";
-  background: linear-gradient(135deg, rgba(95, 242, 160, 0.14), transparent 44%);
+  background: linear-gradient(
+    135deg,
+    rgba(95, 242, 160, 0.14),
+    transparent 44%
+  );
   opacity: 0;
   transition: opacity 0.18s ease;
 }
@@ -525,19 +581,74 @@ pre,
   margin: 0;
 }
 
-.dashboard-visual img {
-  width: 100%;
-  height: auto;
+.dashboard-visual .screenshot-link,
+.product-shot .screenshot-link,
+.docs-screenshot .screenshot-link {
+  display: block;
+  overflow: hidden;
+  background: #07110f;
+}
+
+.dashboard-visual .screenshot-link {
   border: 1px solid var(--line-strong);
   border-radius: var(--radius);
-  background: #07110f;
   box-shadow: var(--shadow);
+}
+
+.dashboard-visual img,
+.product-shot img,
+.docs-screenshot img {
+  width: 100%;
+  height: auto;
 }
 
 .dashboard-visual figcaption {
   margin-top: 0.75rem;
   color: var(--faint);
   font-size: 0.82rem;
+}
+
+.product-tour-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.product-shot {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-panel);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+}
+
+.product-shot .screenshot-link {
+  border-bottom: 1px solid var(--line);
+}
+
+.product-shot img {
+  transition: transform 0.28s ease;
+}
+
+.product-shot:hover img {
+  transform: scale(1.012);
+}
+
+.product-shot figcaption {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem 1.1rem 1.15rem;
+}
+
+.product-shot figcaption strong {
+  font-size: 0.98rem;
+}
+
+.product-shot figcaption span {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.6;
 }
 
 .code-layout {
@@ -670,7 +781,11 @@ code {
   border-radius: var(--radius);
   padding: clamp(1.4rem, 4vw, 2.4rem);
   background:
-    linear-gradient(120deg, rgba(95, 242, 160, 0.12), rgba(118, 228, 255, 0.04)),
+    linear-gradient(
+      120deg,
+      rgba(95, 242, 160, 0.12),
+      rgba(118, 228, 255, 0.04)
+    ),
     var(--bg-panel);
   box-shadow: var(--shadow);
 }
@@ -763,7 +878,11 @@ code {
   border-bottom: 1px solid var(--line);
   border-left: 1px solid var(--line);
   background:
-    radial-gradient(circle at 86% 12%, rgba(118, 228, 255, 0.12), transparent 28%),
+    radial-gradient(
+      circle at 86% 12%,
+      rgba(118, 228, 255, 0.12),
+      transparent 28%
+    ),
     linear-gradient(135deg, rgba(95, 242, 160, 0.1), transparent 52%),
     var(--bg-panel);
 }
@@ -874,6 +993,26 @@ code {
 .docs-content > .guide-section > .code-card + .guide-note,
 .docs-content > .guide-section > .docs-grid + .guide-note {
   margin-top: 1rem;
+}
+
+.docs-screenshot {
+  margin: 1rem 0 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--bg-panel);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+}
+
+.docs-screenshot .screenshot-link {
+  border-bottom: 1px solid var(--line);
+}
+
+.docs-screenshot figcaption {
+  padding: 0.9rem 1rem;
+  color: var(--faint);
+  font-size: 0.84rem;
+  line-height: 1.6;
 }
 
 .guide-note {
@@ -1085,7 +1224,12 @@ code {
 
   .hero-backdrop::before {
     background:
-      linear-gradient(180deg, rgba(2, 6, 5, 0.9) 0%, rgba(2, 6, 5, 0.64) 56%, rgba(2, 6, 5, 0.92) 100%),
+      linear-gradient(
+        180deg,
+        rgba(2, 6, 5, 0.9) 0%,
+        rgba(2, 6, 5, 0.64) 56%,
+        rgba(2, 6, 5, 0.92) 100%
+      ),
       linear-gradient(90deg, rgba(2, 6, 5, 0.82), rgba(2, 6, 5, 0.22));
   }
 
@@ -1125,7 +1269,8 @@ code {
 
   .feature-grid,
   .workflow-track,
-  .stack-grid {
+  .stack-grid,
+  .product-tour-grid {
     grid-template-columns: 1fr;
   }
 

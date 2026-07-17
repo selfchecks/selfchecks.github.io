@@ -16,6 +16,11 @@ const requiredFiles = [
   "og-card.png",
   "assets/selfchecks-hero.png",
   "assets/selfchecks-dashboard.png",
+  "assets/product-dashboard.webp",
+  "assets/product-test-sessions.webp",
+  "assets/product-usage.webp",
+  "assets/product-check-detail.webp",
+  "assets/product-run-detail.webp",
   "robots.txt",
   "sitemap.xml",
   "llms.txt",
@@ -28,11 +33,14 @@ for (const file of requiredFiles) {
 
 const server = createServer(async (request, response) => {
   const requestUrl = new URL(request.url ?? "/", "http://127.0.0.1");
-  const pathname = requestUrl.pathname === "/" ? "/index.html" : requestUrl.pathname;
+  const pathname =
+    requestUrl.pathname === "/" ? "/index.html" : requestUrl.pathname;
   const target = path.join(root, pathname);
 
   try {
-    const file = await import("node:fs/promises").then(({ readFile }) => readFile(target));
+    const file = await import("node:fs/promises").then(({ readFile }) =>
+      readFile(target),
+    );
     const ext = path.extname(target);
     const contentType =
       ext === ".css"
@@ -43,9 +51,11 @@ const server = createServer(async (request, response) => {
             ? "image/svg+xml"
             : ext === ".png"
               ? "image/png"
-              : ext === ".xml"
-                ? "application/xml"
-                : "text/html";
+              : ext === ".webp"
+                ? "image/webp"
+                : ext === ".xml"
+                  ? "application/xml"
+                  : "text/html";
 
     response.writeHead(200, { "content-type": contentType });
     response.end(file);
@@ -67,7 +77,13 @@ try {
     {
       minimumVerticalGaps: [],
       path: "/",
-      requiredSelectors: ["h1", "#dashboard img", 'a[href="./getting-started.html"]'],
+      requiredSelectors: [
+        "h1",
+        "#create-selfchecks-command",
+        '#dashboard img[src="./assets/product-dashboard.webp"]',
+        ".product-tour-grid img",
+        'a[href="./getting-started.html"]',
+      ],
       title: "Selfchecks",
     },
     {
@@ -81,6 +97,8 @@ try {
       requiredSelectors: [
         "h1",
         "#project",
+        ".docs-screenshot img",
+        "#migration",
         "#http-api",
         "#gitlab-ci",
         "#github-ci",
@@ -102,17 +120,29 @@ try {
       });
       page.on("pageerror", (error) => errors.push(error.message));
 
-      const response = await page.goto(`http://127.0.0.1:${port}${pageDefinition.path}`, {
-        waitUntil: "networkidle",
-      });
-      assert.equal(response?.status(), 200, `${pageDefinition.path} should load`);
+      const response = await page.goto(
+        `http://127.0.0.1:${port}${pageDefinition.path}`,
+        {
+          waitUntil: "networkidle",
+        },
+      );
+      assert.equal(
+        response?.status(),
+        200,
+        `${pageDefinition.path} should load`,
+      );
       assert.match(await page.title(), new RegExp(pageDefinition.title, "i"));
 
       for (const selector of pageDefinition.requiredSelectors) {
-        await assert.doesNotReject(() => page.locator(selector).first().waitFor());
+        await assert.doesNotReject(() =>
+          page.locator(selector).first().waitFor(),
+        );
       }
 
-      for (const [beforeSelector, afterSelector] of pageDefinition.minimumVerticalGaps) {
+      for (const [
+        beforeSelector,
+        afterSelector,
+      ] of pageDefinition.minimumVerticalGaps) {
         const beforeBox = await page.locator(beforeSelector).boundingBox();
         const afterBox = await page.locator(afterSelector).boundingBox();
         assert(beforeBox, `${beforeSelector} should have a layout box`);
@@ -123,7 +153,11 @@ try {
         );
       }
 
-      assert.equal(errors.length, 0, `browser console errors: ${errors.join("; ")}`);
+      assert.equal(
+        errors.length,
+        0,
+        `browser console errors: ${errors.join("; ")}`,
+      );
       await page.close();
     }
   }
