@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
-import { stat } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 
 import { chromium } from "playwright";
@@ -29,6 +29,20 @@ const requiredFiles = [
 for (const file of requiredFiles) {
   const fileStat = await stat(path.join(root, file));
   assert(fileStat.size > 0, `${file} should not be empty`);
+}
+
+for (const file of ["index.html", "getting-started.html"]) {
+  const source = await readFile(path.join(root, file), "utf8");
+  assert.match(
+    source,
+    /ym\(110846589, "init",/,
+    `${file} should initialize Yandex Metrika`,
+  );
+  assert.match(
+    source,
+    /https:\/\/mc\.yandex\.ru\/watch\/110846589/,
+    `${file} should include the Yandex Metrika noscript fallback`,
+  );
 }
 
 const server = createServer(async (request, response) => {
