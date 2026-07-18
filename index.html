@@ -561,7 +561,9 @@ npx selfchecks trigger \
                 Copy
               </button>
             </div>
-            <pre><code id="check-definition" data-lang="ts">new BrowserCheck("Signin", {
+            <pre><code id="check-definition" data-lang="ts">import { BrowserCheck, Frequency } from "@selfchecks/selfchecks/constructs";
+
+new BrowserCheck("Signin", {
   name: "Signin",
   activated: true,
   frequency: Frequency.EVERY_10M,
@@ -582,39 +584,62 @@ npx selfchecks trigger \
             provide the defaults, and every value can be overridden with a CLI
             flag.
           </p>
-          <ul class="check-list">
-            <li>
-              <span
-                ><code>repository</code> / <code>--repository</code> —
-                repository path, such as
-                <code>sendsay-ru/frontend/account</code>.</span
-              >
-            </li>
-            <li>
-              <span
-                ><code>ref</code> / <code>--ref</code> — branch or tag, such as
-                <code>release/3.192.42</code>.</span
-              >
-            </li>
-            <li>
-              <span
-                ><code>commitSha</code> / <code>--commit-sha</code> — full
-                commit SHA.</span
-              >
-            </li>
-            <li>
-              <span
-                ><code>pipelineUrl</code> / <code>--pipeline-url</code> — link
-                to the CI pipeline.</span
-              >
-            </li>
-            <li>
-              <span
-                ><code>jobUrl</code> / <code>--job-url</code> — link to the CI
-                job.</span
-              >
-            </li>
-          </ul>
+          <div class="table-wrap metadata-table-wrap">
+            <table>
+              <caption>
+                CI metadata fields, CLI overrides, and GitLab defaults
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Field</th>
+                  <th scope="col">CLI flag</th>
+                  <th scope="col">GitLab default</th>
+                  <th scope="col">Stored value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row"><code>repository</code></th>
+                  <td><code>--repository</code></td>
+                  <td><code>CI_PROJECT_PATH</code></td>
+                  <td>
+                    Repository path, for example
+                    <code>sendsay-ru/frontend/account</code>.
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>ref</code></th>
+                  <td><code>--ref</code></td>
+                  <td>
+                    <code>CI_COMMIT_TAG</code> or
+                    <code>CI_COMMIT_REF_NAME</code>
+                  </td>
+                  <td>
+                    Branch or tag, for example
+                    <code>release/3.192.42</code>.
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>commitSha</code></th>
+                  <td><code>--commit-sha</code></td>
+                  <td><code>CI_COMMIT_SHA</code></td>
+                  <td>Full commit SHA.</td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>pipelineUrl</code></th>
+                  <td><code>--pipeline-url</code></td>
+                  <td><code>CI_PIPELINE_URL</code></td>
+                  <td>Link to the CI pipeline.</td>
+                </tr>
+                <tr>
+                  <th scope="row"><code>jobUrl</code></th>
+                  <td><code>--job-url</code></td>
+                  <td><code>CI_JOB_URL</code></td>
+                  <td>Link to the CI job.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </article>
       </section>
 
