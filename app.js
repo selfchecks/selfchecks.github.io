@@ -124,10 +124,85 @@ function setupCopyButtons() {
   }
 }
 
+function setupScreenshotModal() {
+  const links = [...document.querySelectorAll(".screenshot-link")];
+
+  if (links.length === 0) {
+    return;
+  }
+
+  const dialog = document.createElement("dialog");
+  dialog.className = "screenshot-modal";
+  dialog.setAttribute("aria-label", "Screenshot preview");
+  dialog.setAttribute("aria-describedby", "screenshot-modal-caption");
+  dialog.innerHTML = `
+    <figure class="screenshot-modal-frame">
+      <button class="screenshot-modal-close" type="button" aria-label="Close screenshot preview">
+        <span aria-hidden="true">×</span>
+      </button>
+      <img class="screenshot-modal-image" alt="" />
+      <figcaption class="screenshot-modal-caption" id="screenshot-modal-caption"></figcaption>
+    </figure>
+  `;
+  document.body.append(dialog);
+
+  const closeButton = dialog.querySelector(".screenshot-modal-close");
+  const frame = dialog.querySelector(".screenshot-modal-frame");
+  const modalImage = dialog.querySelector(".screenshot-modal-image");
+  const caption = dialog.querySelector(".screenshot-modal-caption");
+  let lastTrigger = null;
+
+  if (!closeButton || !frame || !modalImage || !caption) {
+    dialog.remove();
+    return;
+  }
+
+  for (const link of links) {
+    link.addEventListener("click", (event) => {
+      if (
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey ||
+        typeof dialog.showModal !== "function"
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+
+      const previewImage = link.querySelector("img");
+      const description = previewImage?.alt ?? "";
+      modalImage.src = link.href;
+      modalImage.alt = description;
+      caption.textContent = description;
+      lastTrigger = link;
+      document.body.classList.add("modal-open");
+      dialog.showModal();
+      closeButton.focus({ preventScroll: true });
+    });
+  }
+
+  closeButton.addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) {
+      dialog.close();
+    }
+  });
+  dialog.addEventListener("close", () => {
+    document.body.classList.remove("modal-open");
+    modalImage.removeAttribute("src");
+    lastTrigger?.focus({ preventScroll: true });
+    lastTrigger = null;
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   for (const block of document.querySelectorAll("pre code[data-lang]")) {
     highlightCodeBlock(block);
   }
 
   setupCopyButtons();
+  setupScreenshotModal();
 });

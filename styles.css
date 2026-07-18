@@ -51,6 +51,10 @@ body {
     sans-serif;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 body::selection {
   background: rgba(95, 242, 160, 0.34);
 }
@@ -575,6 +579,99 @@ pre,
   display: block;
   overflow: hidden;
   background: #07110f;
+  cursor: zoom-in;
+}
+
+.screenshot-link:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 4px;
+}
+
+.screenshot-modal {
+  inset: 0;
+  display: none;
+  width: 100vw;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  overflow: auto;
+  border: 0;
+  padding: clamp(1rem, 3vw, 3rem);
+  background: transparent;
+  color: var(--text);
+}
+
+.screenshot-modal[open] {
+  display: grid;
+  place-items: center;
+}
+
+.screenshot-modal::backdrop {
+  background: rgba(1, 5, 4, 0.9);
+  backdrop-filter: blur(8px);
+}
+
+.screenshot-modal-frame {
+  position: relative;
+  display: grid;
+  width: fit-content;
+  max-width: min(100%, 120rem);
+  margin: auto;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--bg-panel-solid);
+  box-shadow: 0 32px 100px rgba(0, 0, 0, 0.68);
+}
+
+.screenshot-modal-image {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: calc(100vh - 8rem);
+  max-height: calc(100dvh - 8rem);
+  object-fit: contain;
+  background: #07110f;
+}
+
+.screenshot-modal-caption {
+  margin: 0;
+  border-top: 1px solid var(--line);
+  padding: 0.8rem 1rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.screenshot-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: rgba(2, 6, 5, 0.88);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.38);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.65rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.screenshot-modal-close:hover {
+  border-color: var(--green);
+  color: var(--green);
+}
+
+.screenshot-modal-close:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
 }
 
 .dashboard-visual .screenshot-link {
@@ -1303,6 +1400,27 @@ code {
   .docs-grid,
   .module-grid {
     grid-template-columns: 1fr;
+  }
+
+  .screenshot-modal {
+    padding: 0.5rem;
+  }
+
+  .screenshot-modal-image {
+    max-height: calc(100vh - 7rem);
+    max-height: calc(100dvh - 7rem);
+  }
+
+  .screenshot-modal-caption {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.76rem;
+  }
+
+  .screenshot-modal-close {
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
   }
 }
 

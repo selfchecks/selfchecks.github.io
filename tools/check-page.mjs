@@ -155,6 +155,49 @@ try {
         );
       }
 
+      const previewLink = page.locator(".screenshot-link").first();
+      const previewHref = await previewLink.getAttribute("href");
+      assert(previewHref, "screenshot preview link should have an href");
+      assert.equal(
+        await previewLink.getAttribute("target"),
+        null,
+        "screenshot preview should not open a new tab",
+      );
+
+      await previewLink.click();
+
+      const screenshotModal = page.locator(".screenshot-modal");
+      await screenshotModal.waitFor({ state: "visible" });
+      assert(
+        await screenshotModal.evaluate((element) => element.open),
+        "screenshot modal should be open",
+      );
+
+      const modalSource = await screenshotModal
+        .locator(".screenshot-modal-image")
+        .getAttribute("src");
+      assert(modalSource, "screenshot modal should show an image");
+      assert.equal(
+        new URL(modalSource).pathname,
+        new URL(previewHref, page.url()).pathname,
+        "screenshot modal should show the linked full-size image",
+      );
+      assert(
+        await page
+          .locator("body")
+          .evaluate((element) => element.classList.contains("modal-open")),
+        "page scrolling should be locked while the modal is open",
+      );
+
+      await page.keyboard.press("Escape");
+      await screenshotModal.waitFor({ state: "hidden" });
+      assert(
+        await previewLink.evaluate(
+          (element) => element === document.activeElement,
+        ),
+        "focus should return to the screenshot preview link",
+      );
+
       for (const [
         beforeSelector,
         afterSelector,
