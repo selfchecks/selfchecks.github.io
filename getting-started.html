@@ -6,17 +6,14 @@
     <title>Getting started with Selfchecks — Checks as code guide</title>
     <meta
       name="description"
-      content="Create a Selfchecks project from scratch, add browser and API checks, use the HTTP API, configure GitLab or GitHub CI/CD, and deploy your own server."
-    />
-    <meta
-      name="keywords"
-      content="Selfchecks documentation, checks as code guide, Playwright monitoring, API checks, GitLab CI, GitHub Actions, self-hosted monitoring"
+      content="Create a Selfchecks project, add API and Playwright browser checks, connect GitHub or GitLab CI/CD, and deploy the monitoring service on your server."
     />
     <meta
       name="robots"
       content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
     />
     <meta name="theme-color" content="#06110f" />
+    <meta name="author" content="Selfchecks" />
     <link
       rel="canonical"
       href="https://selfchecks.github.io/getting-started.html"
@@ -27,7 +24,7 @@
       rel="alternate"
       type="text/plain"
       href="https://selfchecks.github.io/llms.txt"
-      title="LLMs"
+      title="Selfchecks LLM context"
     />
     <meta property="og:type" content="article" />
     <meta property="og:locale" content="en_US" />
@@ -46,9 +43,16 @@
       content="https://selfchecks.github.io/og-card.png"
     />
     <meta
+      property="og:image:secure_url"
+      content="https://selfchecks.github.io/og-card.png"
+    />
+    <meta
       property="og:image:alt"
       content="Selfchecks social card showing a synthetic monitoring dashboard and checks as code workflow."
     />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Getting started with Selfchecks" />
     <meta
@@ -58,6 +62,10 @@
     <meta
       name="twitter:image"
       content="https://selfchecks.github.io/og-card.png"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Selfchecks social card showing a synthetic monitoring dashboard and checks as code workflow."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -69,20 +77,80 @@
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "TechArticle",
-        "headline": "Getting started with Selfchecks",
-        "description": "Create a Selfchecks project, add API and browser checks, configure CI/CD, use the HTTP API, and deploy a server.",
-        "url": "https://selfchecks.github.io/getting-started.html",
-        "isPartOf": {
-          "@type": "WebSite",
-          "name": "Selfchecks",
-          "url": "https://selfchecks.github.io/"
-        },
-        "about": {
-          "@type": "SoftwareApplication",
-          "name": "Selfchecks",
-          "applicationCategory": "DeveloperApplication"
-        }
+        "@graph": [
+          {
+            "@type": "TechArticle",
+            "@id": "https://selfchecks.github.io/getting-started.html#article",
+            "headline": "Getting started with Selfchecks",
+            "description": "Create a Selfchecks project, add API and browser checks, configure CI/CD, use the HTTP API, and deploy a server.",
+            "url": "https://selfchecks.github.io/getting-started.html",
+            "datePublished": "2026-07-16",
+            "dateModified": "2026-07-20",
+            "inLanguage": "en",
+            "image": "https://selfchecks.github.io/og-card.png",
+            "isPartOf": {
+              "@id": "https://selfchecks.github.io/#website"
+            },
+            "author": {
+              "@id": "https://selfchecks.github.io/#organization"
+            },
+            "publisher": {
+              "@id": "https://selfchecks.github.io/#organization"
+            },
+            "about": {
+              "@id": "https://selfchecks.github.io/#software"
+            },
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": "https://selfchecks.github.io/getting-started.html"
+            }
+          },
+          {
+            "@type": "BreadcrumbList",
+            "@id": "https://selfchecks.github.io/getting-started.html#breadcrumb",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Selfchecks",
+                "item": "https://selfchecks.github.io/"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Getting started",
+                "item": "https://selfchecks.github.io/getting-started.html"
+              }
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://selfchecks.github.io/#website",
+            "name": "Selfchecks",
+            "url": "https://selfchecks.github.io/",
+            "publisher": {
+              "@id": "https://selfchecks.github.io/#organization"
+            }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://selfchecks.github.io/#organization",
+            "name": "Selfchecks",
+            "url": "https://selfchecks.github.io/",
+            "logo": "https://selfchecks.github.io/apple-touch-icon.png",
+            "sameAs": ["https://github.com/selfchecks"]
+          },
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://selfchecks.github.io/#software",
+            "name": "Selfchecks",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Linux",
+            "url": "https://selfchecks.github.io/",
+            "codeRepository": "https://github.com/selfchecks/selfchecks",
+            "license": "https://github.com/selfchecks/selfchecks/blob/stable/LICENSE"
+          }
+        ]
       }
     </script>
     <!-- Yandex.Metrika counter -->
@@ -1061,9 +1129,9 @@ jobs:
               admin login, and password. Caddy reloads and requests the TLS
               certificate after setup. Read
               <code>SELFCHECKS_API_TOKEN</code> from
-              <code>/opt/selfchecks/.env</code> for CLI access.
-              Run the installation command again to update Selfchecks without
-              replacing the existing environment or runtime configuration.
+              <code>/opt/selfchecks/.env</code> for CLI access. Run the
+              installation command again to update Selfchecks without replacing
+              the existing environment or runtime configuration.
             </p>
           </aside>
         </section>
@@ -1088,8 +1156,8 @@ jobs:
         <p>Monitoring stays in your repository and on your infrastructure.</p>
         <p class="footer-license">
           Source available under the Elastic License 2.0. The license does not
-          permit providing substantial Selfchecks functionality to third
-          parties as a hosted or managed service.
+          permit providing substantial Selfchecks functionality to third parties
+          as a hosted or managed service.
         </p>
       </div>
       <div class="footer-links">

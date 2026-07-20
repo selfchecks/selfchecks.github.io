@@ -1,81 +1,102 @@
 # Selfchecks
 
-Selfchecks is a self-hosted synthetic checks runner and dashboard for projects
-that already describe monitoring as code.
+> Selfchecks is a source-available, self-hosted synthetic monitoring service for
+> API and browser checks defined as code. It runs checks on the user's own
+> infrastructure and keeps run evidence in an operational dashboard.
 
 Canonical site: https://selfchecks.github.io/
-Getting started: https://selfchecks.github.io/getting-started.html
-Main source: https://github.com/selfchecks/selfchecks
-License: Elastic License 2.0 (source available; not OSI-approved open source)
-License terms: https://github.com/selfchecks/selfchecks/blob/stable/LICENSE
+Language: English
+Last updated: 2026-07-20
 
-## Documentation
+## Primary documentation
 
-The Getting Started guide is the canonical external documentation for creating
-a project, configuring Playwright and Checkly-compatible manifests, writing API
-and browser checks, selecting test modules, using the authenticated HTTP API,
-setting up GitLab CI/CD and GitHub Actions, and deploying a Selfchecks server.
+- [Selfchecks landing page](https://selfchecks.github.io/): Product overview,
+  workflow, dashboard, CLI, stack, license boundary, and frequently asked
+  questions.
+- [Getting started](https://selfchecks.github.io/getting-started.html): Canonical
+  guide for creating a project, writing checks, using the HTTP API, configuring
+  GitLab or GitHub CI/CD, migrating supported Checkly constructs, and deploying
+  a Selfchecks server.
+- [Main source repository](https://github.com/selfchecks/selfchecks): Application,
+  worker, packages, installation scripts, issue tracker, and releases.
+- [Elastic License 2.0](https://github.com/selfchecks/selfchecks/blob/stable/LICENSE):
+  Canonical license terms.
+
+## Quick facts
+
+- Product category: self-hosted synthetic monitoring and checks as code.
+- Check types: API checks and Playwright browser checks.
+- Deployment: a Linux server running the Docker Compose stack.
+- Project CI requirements: Node.js and the Selfchecks CLI; Docker is not required
+  in project CI jobs.
+- Server components: Next.js dashboard, PostgreSQL, BullMQ, Redis, Playwright,
+  native fetch / Undici, and Caddy.
+- Run evidence: request and response data, logs, screenshots, Playwright traces,
+  videos, timing metrics, performance data, and result JSON.
+- Notifications: generic webhooks for failure and recovery events, with
+  Rocket.Chat as the first concrete adapter.
+- License: source available under Elastic License 2.0; not OSI-approved open
+  source.
 
 ## npm packages
 
-- `create-selfchecks`: project generator, run as `npx create-selfchecks`.
-- `@selfchecks/selfchecks-cli`: remote `selfchecks` CLI for deploy, test, and trigger.
-- `@selfchecks/selfchecks`: supported checks-as-code constructs.
+- [`create-selfchecks`](https://www.npmjs.com/package/create-selfchecks): Project
+  generator, invoked as `npx create-selfchecks my-checks`.
+- [`@selfchecks/selfchecks-cli`](https://www.npmjs.com/package/@selfchecks/selfchecks-cli):
+  Remote `selfchecks` CLI for deploy, test, and trigger workflows.
+- [`@selfchecks/selfchecks`](https://www.npmjs.com/package/@selfchecks/selfchecks):
+  Supported checks-as-code constructs.
 
-The fastest start is `npx create-selfchecks my-checks`. It creates and installs a
-minimal project with one Playwright browser check for
-`https://selfchecks.github.io/`.
+## Core workflow
 
-Projects migrating from Checkly can keep their existing import specifiers with
-the npm alias `"checkly": "npm:@selfchecks/selfchecks@latest"`.
-
-## Positioning
-
-Selfchecks keeps a repository-owned checks-as-code workflow while replacing a
-hosted control plane with a small self-hosted service. It targets API checks,
-browser checks, grouped checks, tags, schedules, artifacts, CI reports, and
-webhook notifications. Checkly-style compatibility is an import and migration
-feature, not the core identity of the product.
+1. Define API or browser checks next to application code.
+2. Upload definitions with `selfchecks deploy`, or upload and run a test bundle
+   with `selfchecks test`.
+3. Queue runs from schedules, manual triggers, or CI jobs.
+4. Execute checks on the self-hosted worker.
+5. Inspect status, latency, availability, logs, traces, screenshots, videos, and
+   responses in the dashboard.
+6. Send failure and recovery notifications through webhook adapters.
 
 ## Useful commands
 
-- `selfchecks deploy --force`
-- `selfchecks test --reporter=github --record`
-- `selfchecks trigger --reporter=github --retries=1 --record`
+- `npx create-selfchecks my-checks`
+- `selfchecks deploy --project my-project --root .`
+- `selfchecks test --project my-project --root . --record --reporter github`
+- `selfchecks trigger --project my-project --record --retries 1`
 
-## Checkly migration subset
+## Checkly compatibility boundary
+
+Selfchecks provides a deliberately narrow migration subset, not complete Checkly
+compatibility. Projects can alias the supported package with
+`"checkly": "npm:@selfchecks/selfchecks@latest"` to preserve common import
+specifiers.
 
 Supported from `checkly`: `defineConfig`.
 
 Supported from `checkly/constructs`: `ApiCheck`, `BrowserCheck`, `CheckGroup`,
-`CheckGroupV2`, the documented `Frequency` constants, `AssertionBuilder`,
+`CheckGroupV2`, documented `Frequency` constants, `AssertionBuilder`,
 `RetryStrategyBuilder`, `AlertEscalationBuilder.runBasedEscalation`,
-`WebhookAlertChannel`, and the related props/request types. Compatibility is
-intentionally narrow. Assertion builder expressions, alert channels, and
-escalation objects provide source compatibility but are not deployed by the
-current importer. Other Checkly APIs and runtime behavior are unsupported.
+`WebhookAlertChannel`, and related props and request types.
+
+Assertion builder expressions, alert channels, and escalation objects provide
+source compatibility but are not deployed by the current importer. Other Checkly
+APIs, cloud services, CLI commands, and runtime behavior are unsupported.
 
 ## Remote CI flow
 
 Set `SELFCHECKS_URL` to the dashboard URL and `SELFCHECKS_API_TOKEN` to a valid
-project API token. The CLI uploads deploy and test bundles through the
-authenticated HTTP API. `selfchecks trigger` queues checks from the latest
-successful deployment. Project CI does not require SSH or rsync credentials.
+project API token. The CLI uploads source bundles through the authenticated HTTP
+API. Bundles exclude dependencies, local secrets, reports, and previous artifacts
+and are limited to 10,000 files and 40 MB.
 
-Recorded test sessions store CI metadata as separate fields rather than a
-delimiter-based source string:
+Recorded CI sessions store repository, ref, commit SHA, pipeline URL, and job URL
+as separate fields. GitLab variables provide defaults; GitHub Actions values are
+passed with the corresponding CLI flags.
 
-- `repository` (`--repository`, defaults to `CI_PROJECT_PATH`)
-- `ref` (`--ref`, defaults to the GitLab branch or tag)
-- `commitSha` (`--commit-sha`, defaults to `CI_COMMIT_SHA`)
-- `pipelineUrl` (`--pipeline-url`, defaults to `CI_PIPELINE_URL`)
-- `jobUrl` (`--job-url`, defaults to `CI_JOB_URL`)
+## Licensing boundary
 
-## MVP stack
-
-- Next.js dashboard
-- PostgreSQL database
-- BullMQ and Redis worker queue
-- Playwright browser runner
-- native fetch / Undici API runner
-- generic webhooks with Rocket.Chat as the first concrete adapter
+Selfchecks is source available under the Elastic License 2.0. The license permits
+use, modification, and redistribution under its terms, but it does not permit
+providing substantial Selfchecks functionality to third parties as a hosted or
+managed service. Refer to the canonical license link above for legal terms.

@@ -3,16 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>
-      Selfchecks — Self-hosted synthetic monitoring from checks as code
-    </title>
+    <title>Selfchecks — Self-hosted synthetic monitoring as code</title>
     <meta
       name="description"
-      content="Selfchecks is a self-hosted synthetic checks runner and dashboard for teams that describe monitoring as code. Define checks in your repository, run them on your own server, and inspect artifacts in one operational dashboard."
-    />
-    <meta
-      name="keywords"
-      content="self-hosted synthetic monitoring, checks as code, playwright monitoring, api checks, browser checks, self-hosted uptime monitoring"
+      content="Selfchecks is a self-hosted synthetic monitoring service. Define API and browser checks as code, run them on your server, and inspect Playwright artifacts."
     />
     <meta
       name="robots"
@@ -21,6 +15,7 @@
     <meta name="theme-color" content="#06110f" />
     <meta name="application-name" content="Selfchecks" />
     <meta name="apple-mobile-web-app-title" content="Selfchecks" />
+    <meta name="author" content="Selfchecks" />
     <link rel="canonical" href="https://selfchecks.github.io/" />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
@@ -28,7 +23,7 @@
       rel="alternate"
       type="text/plain"
       href="https://selfchecks.github.io/llms.txt"
-      title="LLMs"
+      title="Selfchecks LLM context"
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
@@ -44,6 +39,10 @@
     <meta property="og:url" content="https://selfchecks.github.io/" />
     <meta
       property="og:image"
+      content="https://selfchecks.github.io/og-card.png"
+    />
+    <meta
+      property="og:image:secure_url"
       content="https://selfchecks.github.io/og-card.png"
     />
     <meta
@@ -76,7 +75,13 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="preload" as="image" href="./assets/selfchecks-hero.png" />
+    <link
+      rel="preload"
+      as="image"
+      href="./assets/selfchecks-hero.webp"
+      type="image/webp"
+      fetchpriority="high"
+    />
     <link rel="stylesheet" href="./styles.css" />
     <script type="application/ld+json">
       {
@@ -84,20 +89,53 @@
         "@graph": [
           {
             "@type": "WebSite",
+            "@id": "https://selfchecks.github.io/#website",
             "name": "Selfchecks",
             "url": "https://selfchecks.github.io/",
             "description": "Self-hosted synthetic checks runner and dashboard for checks as code.",
-            "sameAs": ["https://github.com/selfchecks/selfchecks"]
+            "publisher": {
+              "@id": "https://selfchecks.github.io/#organization"
+            }
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://selfchecks.github.io/#organization",
+            "name": "Selfchecks",
+            "url": "https://selfchecks.github.io/",
+            "logo": "https://selfchecks.github.io/apple-touch-icon.png",
+            "sameAs": ["https://github.com/selfchecks"]
+          },
+          {
+            "@type": "WebPage",
+            "@id": "https://selfchecks.github.io/#webpage",
+            "url": "https://selfchecks.github.io/",
+            "name": "Selfchecks — Self-hosted synthetic monitoring as code",
+            "description": "Define API and browser checks as code, run them on your own server, and inspect Playwright artifacts in one dashboard.",
+            "isPartOf": {
+              "@id": "https://selfchecks.github.io/#website"
+            },
+            "about": {
+              "@id": "https://selfchecks.github.io/#software"
+            },
+            "mainEntity": {
+              "@id": "https://selfchecks.github.io/#faq"
+            }
           },
           {
             "@type": "SoftwareApplication",
+            "@id": "https://selfchecks.github.io/#software",
             "name": "Selfchecks",
             "applicationCategory": "DeveloperApplication",
             "operatingSystem": "Linux",
             "url": "https://selfchecks.github.io/",
+            "codeRepository": "https://github.com/selfchecks/selfchecks",
+            "downloadUrl": "https://github.com/selfchecks/selfchecks/releases",
             "license": "https://github.com/selfchecks/selfchecks/blob/stable/LICENSE",
             "description": "Self-hosted synthetic checks runner and dashboard for API and browser checks, Playwright artifacts, CI reports, schedules, and webhook notifications.",
             "isAccessibleForFree": true,
+            "publisher": {
+              "@id": "https://selfchecks.github.io/#organization"
+            },
             "featureList": [
               "Checks as code import and deployment",
               "Self-hosted API and browser check execution",
@@ -105,6 +143,60 @@
               "Dashboard for status, groups, tags, and run history",
               "CI reporter and trigger commands",
               "Webhook failure and recovery notifications"
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://selfchecks.github.io/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is Selfchecks?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Selfchecks is a source-available, self-hosted synthetic monitoring service for API and browser checks defined as code. It combines a runner, dashboard, schedules, CI integration, run artifacts, and webhook notifications."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How do I start a Selfchecks project?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Run npx create-selfchecks my-checks. The generator creates a minimal Node.js project with a Playwright browser check, configuration, scripts, and supported Selfchecks packages."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does Selfchecks require Docker in CI?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Project CI needs Node.js and the Selfchecks CLI, while Docker is required only on the Linux server that hosts the Selfchecks application and worker."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is Selfchecks fully compatible with Checkly?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Selfchecks provides a deliberately narrow source-compatible subset for common Checkly constructs and migration. Unsupported Checkly APIs and cloud runtime behavior are not compatibility targets."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "What evidence does Selfchecks keep for failed checks?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Runs can retain request and response data, logs, screenshots, Playwright traces, videos, timing metrics, performance data, and result JSON for investigation."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is Selfchecks open source?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Selfchecks is source available under the Elastic License 2.0. The license is not OSI-approved and restricts offering substantial Selfchecks functionality to third parties as a hosted or managed service."
+                }
+              }
             ]
           }
         ]
@@ -163,14 +255,18 @@
 
     <header class="site-hero" id="top">
       <div class="hero-backdrop" aria-hidden="true">
-        <img
-          src="./assets/selfchecks-hero.png"
-          alt=""
-          width="2400"
-          height="1500"
-          loading="eager"
-          decoding="async"
-        />
+        <picture>
+          <source srcset="./assets/selfchecks-hero.webp" type="image/webp" />
+          <img
+            src="./assets/selfchecks-hero.png"
+            alt=""
+            width="2400"
+            height="1500"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </picture>
       </div>
       <nav class="topbar" aria-label="Primary navigation">
         <a class="brand" href="#top" aria-label="Selfchecks home">
@@ -192,7 +288,7 @@
           <a href="#workflow">Workflow</a>
           <a href="#dashboard">Dashboard</a>
           <a href="#cli">CLI</a>
-          <a href="#stack">Stack</a>
+          <a href="#faq">FAQ</a>
           <a
             href="https://github.com/selfchecks/selfchecks"
             target="_blank"
@@ -203,10 +299,16 @@
       </nav>
 
       <div class="hero-content">
-        <p class="eyebrow">Self-hosted synthetic monitoring</p>
-        <h1>Selfchecks</h1>
+        <p class="eyebrow">Checks as code, on your infrastructure</p>
+        <h1>
+          <span class="hero-product">Selfchecks</span>
+          <span class="hero-tagline"
+            >Self-hosted synthetic monitoring from checks as code</span
+          >
+        </h1>
         <p class="hero-lead">
-          Define API and browser checks in your repository, run them on your own
+          Selfchecks is a source-available monitoring service for API and
+          browser checks. Define checks in your repository, run them on your own
           server, and inspect failures with traces, screenshots, videos, logs,
           and CI-ready reports.
         </p>
@@ -697,6 +799,71 @@ new BrowserCheck("Signin", {
           </article>
         </div>
       </section>
+
+      <section class="section faq-section" id="faq" aria-labelledby="faq-title">
+        <div class="section-heading compact">
+          <p class="eyebrow">Quick answers</p>
+          <h2 id="faq-title">Selfchecks FAQ</h2>
+          <p>
+            The short version of what Selfchecks is, how it runs, and where its
+            compatibility and license boundaries are.
+          </p>
+        </div>
+
+        <div class="faq-grid">
+          <article class="faq-card">
+            <h3>What is Selfchecks?</h3>
+            <p>
+              Selfchecks is a source-available, self-hosted synthetic monitoring
+              service for API and browser checks defined as code. It combines a
+              runner, dashboard, schedules, CI integration, run artifacts, and
+              webhook notifications.
+            </p>
+          </article>
+          <article class="faq-card">
+            <h3>How do I start a Selfchecks project?</h3>
+            <p>
+              Run <code>npx create-selfchecks my-checks</code>. The generator
+              creates a minimal Node.js project with a Playwright browser check,
+              configuration, scripts, and supported Selfchecks packages.
+            </p>
+          </article>
+          <article class="faq-card">
+            <h3>Does Selfchecks require Docker in CI?</h3>
+            <p>
+              No. Project CI needs Node.js and the Selfchecks CLI, while Docker
+              is required only on the Linux server that hosts the Selfchecks
+              application and worker.
+            </p>
+          </article>
+          <article class="faq-card">
+            <h3>Is Selfchecks fully compatible with Checkly?</h3>
+            <p>
+              No. Selfchecks provides a deliberately narrow source-compatible
+              subset for common Checkly constructs and migration. Unsupported
+              Checkly APIs and cloud runtime behavior are not compatibility
+              targets.
+            </p>
+          </article>
+          <article class="faq-card">
+            <h3>What evidence does Selfchecks keep for failed checks?</h3>
+            <p>
+              Runs can retain request and response data, logs, screenshots,
+              Playwright traces, videos, timing metrics, performance data, and
+              result JSON for investigation.
+            </p>
+          </article>
+          <article class="faq-card">
+            <h3>Is Selfchecks open source?</h3>
+            <p>
+              Selfchecks is source available under the Elastic License 2.0. The
+              license is not OSI-approved and restricts offering substantial
+              Selfchecks functionality to third parties as a hosted or managed
+              service.
+            </p>
+          </article>
+        </div>
+      </section>
     </main>
 
     <footer class="footer">
@@ -717,12 +884,13 @@ new BrowserCheck("Signin", {
         <p>Built for repositories that already treat monitoring as code.</p>
         <p class="footer-license">
           Source available under the Elastic License 2.0. The license does not
-          permit providing substantial Selfchecks functionality to third
-          parties as a hosted or managed service.
+          permit providing substantial Selfchecks functionality to third parties
+          as a hosted or managed service.
         </p>
       </div>
       <div class="footer-links">
         <a href="./getting-started.html">Getting started</a>
+        <a href="#faq">FAQ</a>
         <a
           href="https://github.com/selfchecks/selfchecks"
           target="_blank"

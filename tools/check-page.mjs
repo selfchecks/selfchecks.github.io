@@ -15,6 +15,7 @@ const requiredFiles = [
   "apple-touch-icon.png",
   "og-card.png",
   "assets/selfchecks-hero.png",
+  "assets/selfchecks-hero.webp",
   "assets/selfchecks-dashboard.png",
   "assets/product-dashboard.webp",
   "assets/product-test-sessions.webp",
@@ -31,8 +32,129 @@ for (const file of requiredFiles) {
   assert(fileStat.size > 0, `${file} should not be empty`);
 }
 
-for (const file of ["index.html", "getting-started.html"]) {
+const htmlPages = [
+  {
+    canonical: "https://selfchecks.github.io/",
+    file: "index.html",
+    structuredTypes: [
+      "FAQPage",
+      "Organization",
+      "SoftwareApplication",
+      "WebPage",
+      "WebSite",
+    ],
+  },
+  {
+    canonical: "https://selfchecks.github.io/getting-started.html",
+    file: "getting-started.html",
+    structuredTypes: [
+      "BreadcrumbList",
+      "Organization",
+      "SoftwareApplication",
+      "TechArticle",
+      "WebSite",
+    ],
+  },
+];
+
+for (const { canonical, file, structuredTypes } of htmlPages) {
   const source = await readFile(path.join(root, file), "utf8");
+  const description = source.match(
+    /<meta\s+name="description"\s+content="([^"]+)"/,
+  )?.[1];
+  assert(description, `${file} should have a meta description`);
+  assert(
+    description.length <= 170,
+    `${file} meta description should be concise`,
+  );
+  assert(
+    source.includes('rel="canonical"') &&
+      source.includes(`href="${canonical}"`),
+    `${file} should have the expected canonical URL`,
+  );
+  assert.match(
+    source,
+    /<meta\s+name="robots"\s+content="index,follow,/,
+    `${file} should explicitly allow indexing`,
+  );
+  assert.match(
+    source,
+    /<link\s+rel="alternate"\s+type="text\/plain"\s+href="https:\/\/selfchecks\.github\.io\/llms\.txt"/,
+    `${file} should link to LLM context`,
+  );
+  assert.doesNotMatch(
+    source,
+    /<meta\s+name="keywords"/,
+    `${file} should not use obsolete meta keywords`,
+  );
+  assert.match(source, /property="og:image:alt"/, `${file} needs OG image alt`);
+  assert.match(
+    source,
+    /name="twitter:image:alt"/,
+    `${file} needs Twitter image alt`,
+  );
+
+  const structuredDataScripts = [
+    ...source.matchAll(
+      /<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+    ),
+  ];
+  assert(
+    structuredDataScripts.length > 0,
+    `${file} should include JSON-LD structured data`,
+  );
+
+  const structuredTypesFound = new Set();
+  const structuredEntities = [];
+  for (const [, json] of structuredDataScripts) {
+    const structuredData = JSON.parse(json);
+    assert.equal(
+      structuredData["@context"],
+      "https://schema.org",
+      `${file} should use the Schema.org context`,
+    );
+
+    for (const entity of structuredData["@graph"] ?? [structuredData]) {
+      structuredTypesFound.add(entity["@type"]);
+      structuredEntities.push(entity);
+    }
+  }
+
+  for (const type of structuredTypes) {
+    assert(
+      structuredTypesFound.has(type),
+      `${file} structured data should include ${type}`,
+    );
+  }
+
+  if (file === "index.html") {
+    assert.match(
+      source,
+      /<source srcset="\.\/assets\/selfchecks-hero\.webp" type="image\/webp"/,
+      "index.html should serve the optimized hero image",
+    );
+
+    const faq = structuredEntities.find(
+      (entity) => entity["@type"] === "FAQPage",
+    );
+    assert(faq, "index.html should describe its visible FAQ");
+    for (const question of faq.mainEntity) {
+      assert(
+        source.includes(`<h3>${question.name}</h3>`),
+        `FAQ structured data should match visible question: ${question.name}`,
+      );
+    }
+  }
+
+  if (file === "getting-started.html") {
+    const article = structuredEntities.find(
+      (entity) => entity["@type"] === "TechArticle",
+    );
+    assert.equal(article.datePublished, "2026-07-16");
+    assert.equal(article.dateModified, "2026-07-20");
+    assert.equal(article.image, "https://selfchecks.github.io/og-card.png");
+  }
+
   assert.match(
     source,
     /ym\(110846589, "init",/,
@@ -44,6 +166,28 @@ for (const file of ["index.html", "getting-started.html"]) {
     `${file} should include the Yandex Metrika noscript fallback`,
   );
 }
+
+const [robots, sitemap, llms] = await Promise.all([
+  readFile(path.join(root, "robots.txt"), "utf8"),
+  readFile(path.join(root, "sitemap.xml"), "utf8"),
+  readFile(path.join(root, "llms.txt"), "utf8"),
+]);
+
+assert.match(robots, /User-agent: \*/);
+assert.match(robots, /Allow: \//);
+assert.match(robots, /Sitemap: https:\/\/selfchecks\.github\.io\/sitemap\.xml/);
+
+for (const { canonical } of htmlPages) {
+  assert(
+    sitemap.includes(`<loc>${canonical}</loc>`),
+    `sitemap.xml should include ${canonical}`,
+  );
+  assert(llms.includes(canonical), `llms.txt should include ${canonical}`);
+}
+
+assert.match(llms, /^# Selfchecks$/m);
+assert.match(llms, /^> Selfchecks is /m);
+assert.match(llms, /not OSI-approved open\s+source/i);
 
 const server = createServer(async (request, response) => {
   const requestUrl = new URL(request.url ?? "/", "http://127.0.0.1");
@@ -94,10 +238,12 @@ try {
       requiredSelectors: [
         "h1",
         "#create-selfchecks-command",
+        ".hero-backdrop picture img",
         '#dashboard img[src="./assets/product-dashboard.webp"]',
         ".product-tour-grid img",
         'a[href="./getting-started.html"]',
         ".hero-license",
+        "#faq h3",
         'a[href="https://github.com/selfchecks/selfchecks/blob/stable/LICENSE"]',
       ],
       title: "Selfchecks",
@@ -148,6 +294,11 @@ try {
         `${pageDefinition.path} should load`,
       );
       assert.match(await page.title(), new RegExp(pageDefinition.title, "i"));
+      assert.equal(
+        await page.locator("h1").count(),
+        1,
+        `${pageDefinition.path} should have exactly one h1`,
+      );
 
       for (const selector of pageDefinition.requiredSelectors) {
         await assert.doesNotReject(() =>

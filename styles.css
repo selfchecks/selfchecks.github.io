@@ -155,6 +155,12 @@ pre,
   filter: saturate(1.1) contrast(1.06);
 }
 
+.hero-backdrop picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .topbar {
   display: flex;
   width: min(100% - 2rem, var(--max-width));
@@ -240,12 +246,28 @@ pre,
 
 .hero-content h1 {
   margin: 0;
-  max-width: 7ch;
   color: var(--text);
+}
+
+.hero-product {
+  display: block;
+  max-width: 7ch;
   font-size: clamp(4.7rem, 13vw, 10.2rem);
   font-weight: 900;
   letter-spacing: 0;
   line-height: 0.86;
+  text-wrap: balance;
+}
+
+.hero-tagline {
+  display: block;
+  max-width: 26ch;
+  margin-top: 1.5rem;
+  color: rgba(242, 255, 249, 0.92);
+  font-size: clamp(1.7rem, 4.2vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
   text-wrap: balance;
 }
 
@@ -831,6 +853,41 @@ code {
   margin-top: 0;
 }
 
+.faq-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.faq-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  background:
+    linear-gradient(135deg, rgba(95, 242, 160, 0.07), transparent 52%),
+    var(--bg-panel);
+}
+
+.faq-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.faq-card p {
+  margin: 0.7rem 0 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.72;
+}
+
+.faq-card code {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: rgba(2, 6, 5, 0.64);
+  padding: 0.12rem 0.34rem;
+  font-size: 0.82em;
+}
+
 .footer {
   display: flex;
   width: min(100% - 2rem, var(--max-width));
@@ -1279,7 +1336,8 @@ code {
 
   .feature-grid,
   .workflow-track,
-  .stack-grid {
+  .stack-grid,
+  .faq-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1360,8 +1418,13 @@ code {
     padding-top: 3rem;
   }
 
-  .hero-content h1 {
+  .hero-product {
     font-size: clamp(3.5rem, 19vw, 5.8rem);
+  }
+
+  .hero-tagline {
+    margin-top: 1rem;
+    font-size: clamp(1.55rem, 8vw, 2.35rem);
   }
 
   .hero-lead {
@@ -1376,6 +1439,7 @@ code {
   .feature-grid,
   .workflow-track,
   .stack-grid,
+  .faq-grid,
   .product-tour-grid {
     grid-template-columns: 1fr;
   }
